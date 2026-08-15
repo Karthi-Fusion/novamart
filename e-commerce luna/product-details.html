@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div id="platform-top-banner"></div>
+  <header id="nova-header"></header>
+
+  <main class="store-container" style="margin-top:24px;">
+    <!-- Breadcrumb -->
+    <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:16px;">
+      <a href="index.html">Home</a> / <a href="products.html">Products</a> / <span id="details-breadcrumb-title">Product Details</span>
+    </div>
+
+    <!-- Product Details Card Grid -->
+    <div class="product-details-grid" id="details-main-grid">
+      <!-- Left: Image Gallery -->
+      <div class="details-gallery">
+        <div class="gallery-thumbs" id="gallery-thumbs-list"></div>
+        <div class="gallery-main" id="gallery-main-view">
+          <img id="gallery-primary-img" src="" alt="Product Image" />
+        </div>
+      </div>
+
+      <!-- Right: Info & Actions -->
+      <div class="details-info">
+        <div>
+          <div style="font-size:0.8rem; font-weight:800; color:var(--brand-indigo); text-transform:uppercase; margin-bottom:4px;" id="details-brand"></div>
+          <h1 class="details-title" id="details-title"></h1>
+
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <span class="rating-badge" id="details-rating">★ 4.5</span>
+            <span style="font-size:0.85rem; color:var(--text-muted);" id="details-reviews-count"></span>
+            <span class="badge-status success" id="details-stock-badge">In Stock</span>
+          </div>
+
+          <div style="background:#f8fafc; padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-store); margin-bottom:20px;">
+            <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:6px;">
+              <span style="font-size:2rem; font-weight:800; color:var(--brand-navy);" id="details-price"></span>
+              <span style="font-size:1rem; color:var(--text-light); text-decoration:line-through;" id="details-mrp"></span>
+              <span style="font-size:1rem; font-weight:800; color:var(--brand-emerald);" id="details-discount"></span>
+            </div>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Inclusive of all taxes</div>
+          </div>
+
+          <!-- Offers Badge -->
+          <div style="border:1px dashed var(--brand-indigo); background:rgba(79, 70, 229, 0.05); padding:12px 16px; border-radius:8px; margin-bottom:20px; font-size:0.85rem;">
+            <strong>🏷️ Bank Offer:</strong> 10% Instant Discount up to ₹1,500 on Axis Bank Credit Cards.
+          </div>
+
+          <!-- Delivery Checker -->
+          <div style="margin-bottom:20px;">
+            <div style="font-size:0.85rem; font-weight:700; color:var(--brand-navy); margin-bottom:6px;">Delivery & Availability</div>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="pincode-input" placeholder="Enter Pincode (e.g. 600040)" style="padding:8px 12px; border:1px solid var(--border-store); border-radius:6px; outline:none; font-size:0.88rem;" />
+              <button onclick="checkPincode()" style="background:var(--brand-navy); color:white; padding:8px 16px; border-radius:6px; font-size:0.85rem; font-weight:700;">Check</button>
+            </div>
+            <div id="pincode-res" style="font-size:0.8rem; color:var(--brand-emerald); font-weight:600; margin-top:6px;"></div>
+          </div>
+
+          <!-- Quantity Selector -->
+          <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px;">
+            <span style="font-size:0.9rem; font-weight:700; color:var(--brand-navy);">Quantity:</span>
+            <div style="display:flex; align-items:center; border:1px solid var(--border-store); border-radius:6px; overflow:hidden;">
+              <button onclick="changeQty(-1)" style="padding:6px 14px; background:#f1f5f9; font-weight:800;">-</button>
+              <span id="qty-val" style="padding:6px 16px; font-weight:700;">1</span>
+              <button onclick="changeQty(1)" style="padding:6px 14px; background:#f1f5f9; font-weight:800;">+</button>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display:flex; gap:16px;">
+            <button onclick="addCurrentToCart()" class="btn-hero" style="flex:1; justify-content:center; background:var(--brand-indigo); color:white;">
+              🛒 ADD TO CART
+            </button>
+            <button onclick="buyNowCurrent()" class="btn-hero" style="flex:1; justify-content:center; background:var(--brand-emerald); color:white;">
+              ⚡ BUY NOW
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Highlights & Technical Specifications Section -->
+    <div style="background:white; border-radius:var(--radius-lg); padding:32px; border:1px solid var(--border-store); margin-bottom:32px;">
+      <h2 style="font-size:1.3rem; font-weight:800; color:var(--brand-navy); margin-bottom:16px;">Product Highlights</h2>
+      <ul style="margin-left:20px; font-size:0.95rem; line-height:1.8; color:var(--text-main); margin-bottom:32px;" id="details-highlights-list"></ul>
+
+      <h2 style="font-size:1.3rem; font-weight:800; color:var(--brand-navy); margin-bottom:16px;">Technical Specifications</h2>
+      <table class="specs-table" id="details-specs-table"></table>
+
+      <h2 style="font-size:1.3rem; font-weight:800; color:var(--brand-navy); margin-top:32px; margin-bottom:16px;">Description</h2>
+      <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.7;" id="details-desc-text"></p>
+    </div>
+
+    <!-- Customer Reviews & Ratings Section -->
+    <div style="background:white; border-radius:var(--radius-lg); padding:32px; border:1px solid var(--border-store); margin-bottom:40px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="font-size:1.3rem; font-weight:800; color:var(--brand-navy);">Customer Reviews & Ratings</h2>
+        <button onclick="toggleReviewForm(true)" class="btn-hero" style="background:var(--brand-indigo); color:white; padding:6px 16px; font-size:0.85rem;">
+          ✍️ Write a Review
+        </button>
+      </div>
+
+      <!-- Add Review Form Modal/Box -->
+      <div id="add-review-box" style="display:none; background:#f8fafc; border:1px solid var(--border-store); border-radius:var(--radius-md); padding:20px; margin-bottom:24px;">
+        <h3 style="font-size:1rem; font-weight:800; color:var(--brand-navy); margin-bottom:12px;">Submit Your Review</h3>
+        <form onsubmit="handleReviewSubmit(event)" style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Rating</label>
+            <select id="rev-rating" style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;">
+              <option value="5">★★★★★ (5 Stars)</option>
+              <option value="4">★★★★☆ (4 Stars)</option>
+              <option value="3">★★★☆☆ (3 Stars)</option>
+              <option value="2">★★☆☆☆ (2 Stars)</option>
+              <option value="1">★☆☆☆☆ (1 Star)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Review Title</label>
+            <input type="text" id="rev-title" placeholder="Awesome build quality & fast delivery!" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+          </div>
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Your Review Comment</label>
+            <textarea id="rev-comment" rows="3" placeholder="Share your experience with this product..." required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;"></textarea>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button type="submit" class="btn-hero" style="background:var(--brand-emerald); color:white; padding:8px 20px;">Submit Review</button>
+            <button type="button" onclick="toggleReviewForm(false)" style="padding:8px 16px; font-weight:700;">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Reviews Stream -->
+      <div style="display:flex; flex-direction:column; gap:16px;" id="reviews-list-container">
+        <div style="border-bottom:1px solid var(--border-store); padding-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span class="rating-badge">★ 5.0</span>
+            <strong style="color:var(--brand-navy);">Exceptionally good quality!</strong>
+          </div>
+          <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:6px;">By Karthick (Verified Purchase) • 12 Aug 2026</div>
+          <p style="font-size:0.9rem; color:var(--text-main);">Fast delivery within 24 hours. The packaging was immaculate and product performance is outstanding.</p>
+        </div>
+        <div style="border-bottom:1px solid var(--border-store); padding-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span class="rating-badge">★ 4.5</span>
+            <strong style="color:var(--brand-navy);">Value for money deal</strong>
+          </div>
+          <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:6px;">By Priya S. (Verified Purchase) • 08 Aug 2026</div>
+          <p style="font-size:0.9rem; color:var(--text-main);">Impressed with the battery life and build aesthetics. Highly recommended!</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="nova-footer"></footer>
+
+  <script>
+    let currentProd = null;
+    let selectedQty = 1;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('customer');
+      window.novaApp.renderCustomerHeader();
+      window.novaApp.renderFooter();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const prodId = urlParams.get('id') || 'prod-101';
+      currentProd = NOVAMART_DATA.products.find(p => p.id === prodId) || NOVAMART_DATA.products[0];
+
+      // Populate Product Info
+      document.getElementById('details-breadcrumb-title').textContent = currentProd.name;
+      document.getElementById('details-brand').textContent = currentProd.brand;
+      document.getElementById('details-title').textContent = currentProd.name;
+      document.getElementById('details-rating').textContent = `★ ${currentProd.rating}`;
+      document.getElementById('details-reviews-count').textContent = `(${currentProd.reviewsCount.toLocaleString('en-IN')} ratings & reviews)`;
+      document.getElementById('details-price').textContent = `₹${currentProd.price.toLocaleString('en-IN')}`;
+      document.getElementById('details-mrp').textContent = `₹${currentProd.mrp.toLocaleString('en-IN')}`;
+      document.getElementById('details-discount').textContent = `${currentProd.discount}% OFF`;
+
+      // Gallery setup
+      const thumbsContainer = document.getElementById('gallery-thumbs-list');
+      const primaryImg = document.getElementById('gallery-primary-img');
+      const imagesList = currentProd.images || [currentProd.image];
+      primaryImg.src = imagesList[0];
+
+      thumbsContainer.innerHTML = imagesList.map((imgUrl, i) => `
+        <img src="${imgUrl}" class="thumb-img ${i === 0 ? 'active' : ''}" onclick="switchGalleryImg('${imgUrl}', this)" alt="Thumb" />
+      `).join('');
+
+      // Highlights
+      document.getElementById('details-highlights-list').innerHTML = currentProd.highlights.map(h => `<li>${h}</li>`).join('');
+
+      // Specs Table
+      const specsTable = document.getElementById('details-specs-table');
+      specsTable.innerHTML = Object.entries(currentProd.specs).map(([key, val]) => `
+        <tr><td>${key}</td><td>${val}</td></tr>
+      `).join('');
+
+      // Description
+      document.getElementById('details-desc-text').textContent = currentProd.description;
+    });
+
+    function switchGalleryImg(url, el) {
+      document.getElementById('gallery-primary-img').src = url;
+      document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function changeQty(delta) {
+      selectedQty = Math.max(1, selectedQty + delta);
+      document.getElementById('qty-val').textContent = selectedQty;
+    }
+
+    function checkPincode() {
+      const pin = document.getElementById('pincode-input').value.trim();
+      const resEl = document.getElementById('pincode-res');
+      if (pin.length === 6 && !isNaN(pin)) {
+        resEl.textContent = `✓ Delivery available to ${pin} by Tomorrow! (Cash on Delivery available)`;
+      } else {
+        resEl.textContent = `Please enter a valid 6-digit Pincode.`;
+        resEl.style.color = 'var(--brand-rose)';
+      }
+    }
+
+    function addCurrentToCart() {
+      if (currentProd) {
+        window.novaStore.addToCart(currentProd.id, selectedQty);
+      }
+    }
+
+    function buyNowCurrent() {
+      if (currentProd) {
+        window.novaStore.addToCart(currentProd.id, selectedQty);
+        window.location.href = 'checkout.html';
+      }
+    }
+
+    function toggleReviewForm(show) {
+      document.getElementById('add-review-box').style.display = show ? 'block' : 'none';
+    }
+
+    function handleReviewSubmit(e) {
+      e.preventDefault();
+      const rating = document.getElementById('rev-rating').value;
+      const title = document.getElementById('rev-title').value.trim();
+      const comment = document.getElementById('rev-comment').value.trim();
+
+      const container = document.getElementById('reviews-list-container');
+      const newRev = document.createElement('div');
+      newRev.style.cssText = "border-bottom:1px solid var(--border-store); padding-bottom:12px;";
+      newRev.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+          <span class="rating-badge">★ ${rating}.0</span>
+          <strong style="color:var(--brand-navy);">${title}</strong>
+        </div>
+        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:6px;">By ${window.novaStore.userProfile.fullName} (Verified Purchase) • Just now</div>
+        <p style="font-size:0.9rem; color:var(--text-main);">${comment}</p>
+      `;
+      container.prepend(newRev);
+
+      toggleReviewForm(false);
+      window.novaStore.showToast("Your review has been published!", "success");
+    }
+  </script>
+</body>
+</html>

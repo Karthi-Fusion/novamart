@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div id="platform-top-banner"></div>
+  <header id="nova-header"></header>
+
+  <main class="store-container" style="margin-top:24px;">
+    <h1 style="font-size:1.8rem; font-weight:800; color:var(--brand-navy); margin-bottom:20px;">My Orders & Track Shipment</h1>
+
+    <!-- Orders List Container -->
+    <div style="display:flex; flex-direction:column; gap:24px;" id="orders-list-container">
+      <!-- Injected via JS -->
+    </div>
+  </main>
+
+  <!-- Track Order Animated Modal -->
+  <div id="track-order-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:720px;">
+      <span class="modal-close-btn" onclick="document.getElementById('track-order-modal').classList.remove('active')">&times;</span>
+      <h2 style="font-size:1.4rem; font-weight:800; color:var(--brand-navy); margin-bottom:4px;" id="modal-track-id">Order Tracking</h2>
+      <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:24px;" id="modal-track-date"></div>
+
+      <!-- Animated Tracking Line -->
+      <div class="pipeline-track" id="animated-tracking-flow" style="margin-bottom:30px;">
+        <div class="pipeline-step active" id="tr-step-1"><div class="pipeline-circle">✓</div><div class="pipeline-label">Order Placed</div></div>
+        <div class="pipeline-step active" id="tr-step-2"><div class="pipeline-circle">✓</div><div class="pipeline-label">Confirmed</div></div>
+        <div class="pipeline-step active" id="tr-step-3"><div class="pipeline-circle">✓</div><div class="pipeline-label">Packed</div></div>
+        <div class="pipeline-step active" id="tr-step-4"><div class="pipeline-circle">🚚</div><div class="pipeline-label">Shipped</div></div>
+        <div class="pipeline-step" id="tr-step-5"><div class="pipeline-circle">📦</div><div class="pipeline-label">Out for Delivery</div></div>
+        <div class="pipeline-step" id="tr-step-6"><div class="pipeline-circle">🏠</div><div class="pipeline-label">Delivered</div></div>
+      </div>
+
+      <div style="background:#f8fafc; border-radius:var(--radius-md); padding:16px; border:1px solid var(--border-store);">
+        <div style="font-weight:700; font-size:0.9rem; color:var(--brand-navy); margin-bottom:6px;">Latest Telemetry Update:</div>
+        <div style="font-size:0.85rem; color:var(--brand-emerald); font-weight:600;" id="modal-track-status-text">
+          Package scanned at Distribution Hub. On schedule for delivery.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer id="nova-footer"></footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('customer');
+      window.novaApp.renderCustomerHeader();
+      window.novaApp.renderFooter();
+
+      renderOrdersList();
+    });
+
+    function renderOrdersList() {
+      const container = document.getElementById('orders-list-container');
+      const orders = NOVAMART_DATA.orders;
+
+      if (orders.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:60px; background:white; border-radius:10px; border:1px solid var(--border-store);">
+            <h3>No orders placed yet</h3>
+            <a href="products.html" class="btn-hero" style="margin-top:16px; display:inline-flex; background:var(--brand-indigo); color:white;">Start Shopping →</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map(o => `
+        <div style="background:white; border-radius:var(--radius-lg); padding:24px; border:1px solid var(--border-store); box-shadow:var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-store); padding-bottom:16px; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+            <div>
+              <div style="font-size:0.8rem; color:var(--text-muted);">ORDER PLACED: ${o.date}</div>
+              <div style="font-size:1.1rem; font-weight:800; color:var(--brand-navy);" class="mono">${o.id}</div>
+            </div>
+            <div>
+              <div style="font-size:0.8rem; color:var(--text-muted); text-align:right;">TOTAL AMOUNT</div>
+              <div style="font-size:1.1rem; font-weight:800; color:var(--brand-navy);">₹${o.totalAmount.toLocaleString('en-IN')}</div>
+            </div>
+            <span class="badge-status ${o.status === 'Delivered' ? 'success' : o.status === 'Cancelled' ? 'danger' : 'warning'}">${o.status}</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+            ${o.items.map(item => `
+              <div style="display:flex; align-items:center; gap:16px;">
+                <img src="${item.image}" alt="${item.name}" style="width:60px; height:60px; object-fit:contain; border-radius:6px;" />
+                <div style="flex:1;">
+                  <div style="font-weight:700; font-size:0.92rem; color:var(--brand-navy);">${item.name}</div>
+                  <div style="font-size:0.8rem; color:var(--text-muted);">Qty: ${item.qty} • Price: ₹${item.price.toLocaleString('en-IN')}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="background:#f8fafc; padding:12px; border-radius:6px; margin-bottom:20px; font-size:0.85rem; border:1px solid var(--border-store);">
+            <strong>🏠 Shipping Address & Mobile Contact:</strong> ${o.address} ${o.customerPhone ? `| 📱 Mobile: ${o.customerPhone}` : ''}
+          </div>
+
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            ${o.status !== 'Cancelled' ? `
+              <button onclick="openTrackingModal('${o.id}')" class="btn-add-cart" style="width:auto; padding:8px 20px; background:var(--brand-indigo); color:white;">
+                🚚 Track Order
+              </button>
+              <button onclick="cancelOrder('${o.id}')" class="btn-add-cart" style="width:auto; padding:8px 20px; background:#f1f5f9; color:var(--brand-rose);">
+                ❌ Cancel Order
+              </button>
+            ` : ''}
+            <button onclick="window.novaStore.showToast('Order invoice downloaded as PDF.', 'info')" class="btn-add-cart" style="width:auto; padding:8px 20px;">
+              📄 Download Invoice
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function cancelOrder(orderId) {
+      if (confirm(`Are you sure you want to cancel order #${orderId}?`)) {
+        const order = NOVAMART_DATA.orders.find(o => o.id === orderId);
+        if (order) {
+          order.status = 'Cancelled';
+          renderOrdersList();
+          window.novaStore.showToast(`Order #${orderId} has been cancelled. Refund initiated to source account.`, 'warning');
+        }
+      }
+    }
+
+    function openTrackingModal(orderId) {
+      const order = NOVAMART_DATA.orders.find(o => o.id === orderId) || NOVAMART_DATA.orders[0];
+      document.getElementById('modal-track-id').textContent = `Tracking Order #${order.id}`;
+      document.getElementById('modal-track-date').textContent = `Placed on ${order.date} • Estimated Delivery: ${order.estimatedDelivery}`;
+
+      // Update step visualizer
+      const stepCount = order.trackingStep || 4;
+      for (let i = 1; i <= 6; i++) {
+        const stepEl = document.getElementById(`tr-step-${i}`);
+        if (i <= stepCount) {
+          stepEl.classList.add('active');
+        } else {
+          stepEl.classList.remove('active');
+        }
+      }
+
+      document.getElementById('track-order-modal').classList.add('active');
+    }
+  </script>
+</body>
+</html>

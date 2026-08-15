@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products Catalog — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div id="platform-top-banner"></div>
+  <header id="nova-header"></header>
+
+  <main class="store-container" style="margin-top:24px;">
+    <!-- Breadcrumb & Title -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+      <div>
+        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px;">
+          <a href="index.html">Home</a> / <span id="breadcrumb-category">Products</span>
+        </div>
+        <h1 style="font-size:1.8rem; font-weight:800; color:var(--brand-navy);" id="page-catalog-title">All Products</h1>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div style="font-size:0.9rem; font-weight:600; color:var(--text-muted);">
+          Sort By:
+          <select id="sort-select" onchange="applyFilters()" style="padding:6px 12px; border-radius:6px; border:1px solid var(--border-store); outline:none;">
+            <option value="relevance">Relevance</option>
+            <option value="price-low">Price: Low → High</option>
+            <option value="price-high">Price: High → Low</option>
+            <option value="rating">Customer Rating</option>
+            <option value="newest">Newest Arrivals</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Catalog Main Layout: Sidebar Filters + Products Grid -->
+    <div style="display:grid; grid-template-columns:260px 1fr; gap:24px;">
+      <!-- Sidebar Filters -->
+      <aside style="background:white; border-radius:var(--radius-md); padding:20px; border:1px solid var(--border-store); height:fit-content;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border-store);">
+          <h3 style="font-size:1rem; font-weight:800; color:var(--brand-navy);">Filters</h3>
+          <button onclick="resetFilters()" style="color:var(--brand-indigo); font-size:0.8rem; font-weight:700;">Clear All</button>
+        </div>
+
+        <!-- Deals Only Filter -->
+        <div style="margin-bottom:16px; padding-bottom:12px; border-bottom:1px dashed var(--border-store);">
+          <label style="font-size:0.88rem; font-weight:700; color:var(--brand-indigo); cursor:pointer;">
+            <input type="checkbox" id="deals-only" onchange="applyFilters()" /> ⚡ Deals of the Day Only
+          </label>
+        </div>
+
+        <!-- Category Filter -->
+        <div style="margin-bottom:20px;">
+          <h4 style="font-size:0.85rem; font-weight:700; color:var(--brand-navy); margin-bottom:10px;">Category</h4>
+          <div style="display:flex; flex-direction:column; gap:6px; font-size:0.88rem;" id="filter-categories-list">
+            <!-- Checkboxes rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Brand Filter -->
+        <div style="margin-bottom:20px;">
+          <h4 style="font-size:0.85rem; font-weight:700; color:var(--brand-navy); margin-bottom:10px;">Brand</h4>
+          <div style="display:flex; flex-direction:column; gap:6px; font-size:0.88rem;" id="filter-brands-list">
+            <!-- Brands rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Price Range Slider -->
+        <div style="margin-bottom:20px;">
+          <h4 style="font-size:0.85rem; font-weight:700; color:var(--brand-navy); margin-bottom:10px;">Price Range</h4>
+          <input type="range" id="price-range-slider" min="0" max="400000" step="5000" value="400000" oninput="document.getElementById('price-range-val').textContent = 'Up to ₹' + Number(this.value).toLocaleString('en-IN'); applyFilters();" style="width:100%;" />
+          <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); margin-top:4px;">
+            <span>₹0</span>
+            <span id="price-range-val" style="font-weight:700; color:var(--brand-navy);">Up to ₹4,00,000</span>
+          </div>
+        </div>
+
+        <!-- Minimum Rating Filter -->
+        <div style="margin-bottom:20px;">
+          <h4 style="font-size:0.85rem; font-weight:700; color:var(--brand-navy); margin-bottom:10px;">Rating</h4>
+          <div style="display:flex; flex-direction:column; gap:6px; font-size:0.88rem;">
+            <label><input type="radio" name="rating-filter" value="4" onchange="applyFilters()"> 4★ & above</label>
+            <label><input type="radio" name="rating-filter" value="3" onchange="applyFilters()"> 3★ & above</label>
+            <label><input type="radio" name="rating-filter" value="0" checked onchange="applyFilters()"> All Ratings</label>
+          </div>
+        </div>
+
+        <!-- Stock Availability -->
+        <div>
+          <h4 style="font-size:0.85rem; font-weight:700; color:var(--brand-navy); margin-bottom:10px;">Availability</h4>
+          <label style="font-size:0.88rem;"><input type="checkbox" id="instock-only" onchange="applyFilters()"> Include In-Stock Only</label>
+        </div>
+      </aside>
+
+      <!-- Products Grid Area -->
+      <div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:20px;" id="products-catalog-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="nova-footer"></footer>
+
+  <script>
+    let activeCatFilter = '';
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('customer');
+      window.novaApp.renderCustomerHeader();
+      window.novaApp.renderFooter();
+
+      // Read URL Params
+      const urlParams = new URLSearchParams(window.location.search);
+      activeCatFilter = urlParams.get('cat') || '';
+      const isDealParam = urlParams.get('deal') === 'true';
+      const sortParam = urlParams.get('sort');
+
+      if (isDealParam) {
+        document.getElementById('deals-only').checked = true;
+        document.getElementById('page-catalog-title').textContent = "⚡ Today's Hot Deals";
+        document.getElementById('breadcrumb-category').textContent = "Today's Deals";
+      }
+
+      if (sortParam) {
+        document.getElementById('sort-select').value = sortParam;
+      }
+
+      if (activeCatFilter) {
+        const catObj = NOVAMART_DATA.categories.find(c => c.id === activeCatFilter);
+        const titleText = catObj ? catObj.name : activeCatFilter.toUpperCase();
+        document.getElementById('page-catalog-title').textContent = titleText;
+        document.getElementById('breadcrumb-category').textContent = titleText;
+      }
+
+      // Populate Category filter list
+      const catListEl = document.getElementById('filter-categories-list');
+      catListEl.innerHTML = NOVAMART_DATA.categories.map(c => `
+        <label><input type="checkbox" class="cat-checkbox" value="${c.id}" ${c.id === activeCatFilter ? 'checked' : ''} onchange="applyFilters()" /> ${c.name}</label>
+      `).join('');
+
+      // Populate Brands
+      const brands = [...new Set(NOVAMART_DATA.products.map(p => p.brand))];
+      const brandListEl = document.getElementById('filter-brands-list');
+      brandListEl.innerHTML = brands.map(b => `
+        <label><input type="checkbox" class="brand-checkbox" value="${b}" onchange="applyFilters()" /> ${b}</label>
+      `).join('');
+
+      applyFilters();
+    });
+
+    function resetFilters() {
+      document.querySelectorAll('.cat-checkbox, .brand-checkbox').forEach(cb => cb.checked = false);
+      document.getElementById('price-range-slider').value = 400000;
+      document.getElementById('price-range-val').textContent = 'Up to ₹4,00,000';
+      document.getElementById('instock-only').checked = false;
+      document.getElementById('deals-only').checked = false;
+      document.getElementById('page-catalog-title').textContent = 'All Products';
+      applyFilters();
+    }
+
+    function applyFilters() {
+      let filtered = [...NOVAMART_DATA.products];
+
+      // Deals only filter
+      if (document.getElementById('deals-only').checked) {
+        filtered = filtered.filter(p => p.isDealOfDay || p.discount >= 20);
+      }
+
+      // Selected Categories
+      const selectedCats = Array.from(document.querySelectorAll('.cat-checkbox:checked')).map(cb => cb.value);
+      if (selectedCats.length > 0) {
+        filtered = filtered.filter(p => {
+          return selectedCats.some(cat => {
+            if (cat === 'fashion' && (p.category === 'fashion' || p.category === 'mens-fashion' || p.category === 'womens-fashion')) return true;
+            if (cat === 'mens-fashion' && (p.category === 'fashion' || p.category === 'mens-fashion')) return true;
+            if (cat === 'womens-fashion' && (p.category === 'fashion' || p.category === 'womens-fashion')) return true;
+            return p.category === cat;
+          });
+        });
+      }
+
+      // Selected Brands
+      const selectedBrands = Array.from(document.querySelectorAll('.brand-checkbox:checked')).map(cb => cb.value);
+      if (selectedBrands.length > 0) {
+        filtered = filtered.filter(p => selectedBrands.includes(p.brand));
+      }
+
+      // Max Price
+      const maxPrice = Number(document.getElementById('price-range-slider').value);
+      filtered = filtered.filter(p => p.price <= maxPrice);
+
+      // Rating
+      const minRating = Number(document.querySelector('input[name="rating-filter"]:checked')?.value || 0);
+      filtered = filtered.filter(p => p.rating >= minRating);
+
+      // In stock
+      if (document.getElementById('instock-only').checked) {
+        filtered = filtered.filter(p => p.inStock);
+      }
+
+      // Sort
+      const sortVal = document.getElementById('sort-select').value;
+      if (sortVal === 'price-low') filtered.sort((a, b) => a.price - b.price);
+      if (sortVal === 'price-high') filtered.sort((a, b) => b.price - a.price);
+      if (sortVal === 'rating') filtered.sort((a, b) => b.rating - a.rating);
+      if (sortVal === 'newest') filtered.reverse();
+
+      renderGrid(filtered);
+    }
+
+    function renderGrid(products) {
+      const container = document.getElementById('products-catalog-grid');
+      if (products.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align:center; padding:60px; background:white; border-radius:10px; border:1px solid var(--border-store);">
+            <h3>No products match your selected filters</h3>
+            <button onclick="resetFilters()" class="btn-add-cart" style="margin:16px auto 0 auto; width:auto; padding:10px 24px;">Reset Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = products.map(p => {
+        const isWish = window.novaStore.wishlist.includes(p.id);
+        return `
+          <div class="product-card">
+            ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+            <button class="product-wish-btn ${isWish ? 'active' : ''}" onclick="window.novaStore.toggleWishlist('${p.id}'); this.classList.toggle('active');">♥</button>
+            <a href="product-details.html?id=${p.id}">
+              <div class="product-img-wrapper"><img src="${p.image}" alt="${p.name}" /></div>
+              <div class="product-brand">${p.brand}</div>
+              <div class="product-title">${p.name}</div>
+              <div class="product-rating-row">
+                <span class="rating-badge">★ ${p.rating}</span>
+                <span class="rating-count">(${p.reviewsCount.toLocaleString('en-IN')})</span>
+              </div>
+              <div class="product-price-row">
+                <span class="selling-price">₹${p.price.toLocaleString('en-IN')}</span>
+                <span class="original-price">₹${p.mrp.toLocaleString('en-IN')}</span>
+                <span class="discount-tag">${p.discount}% OFF</span>
+              </div>
+              <div class="delivery-info">🚚 ${p.deliveryText}</div>
+            </a>
+            <button class="btn-add-cart" onclick="window.novaStore.addToCart('${p.id}')">🛒 Add to Cart</button>
+          </div>
+        `;
+      }).join('');
+    }
+  </script>
+</body>
+</html>

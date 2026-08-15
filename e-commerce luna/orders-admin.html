@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders Admin — NOVAMART Operations</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body class="infra-mode">
+  <div id="platform-top-banner"></div>
+
+  <div class="infra-app-container">
+    <aside class="infra-sidebar">
+      <div>
+        <div style="padding:20px; border-bottom:1px solid var(--border-infra); display:flex; align-items:center; gap:10px;">
+          <div class="brand-icon-box" style="width:34px; height:34px; font-size:1rem;">N</div>
+          <div>
+            <div style="font-weight:800; color:white; font-size:1.1rem;">NOVAMART</div>
+            <div style="font-size:0.7rem; color:var(--brand-cyan); font-weight:700;">ADMIN OPERATIONS</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav-list">
+          <a href="admin.html" class="sidebar-nav-item">📊 Analytics Overview</a>
+          <a href="products-admin.html" class="sidebar-nav-item">📦 Product Catalog</a>
+          <a href="orders-admin.html" class="sidebar-nav-item active">🛒 Order Fulfillment</a>
+          <a href="customers-admin.html" class="sidebar-nav-item">👥 Customers Directory</a>
+          <a href="inventory-admin.html" class="sidebar-nav-item">🏬 Inventory & SKUs</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="infra-main-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:white;">Order Fulfillment Center</h1>
+          <p style="color:#94a3b8; font-size:0.9rem;">Manage, confirm, pack, ship, and update order tracking statuses.</p>
+        </div>
+      </div>
+
+      <div class="ops-card">
+        <table class="nova-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Payment</th>
+              <th>Fulfillment Status</th>
+              <th>Update Tracking Status</th>
+            </tr>
+          </thead>
+          <tbody id="orders-admin-tbody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('admin');
+
+      const tbody = document.getElementById('orders-admin-tbody');
+      tbody.innerHTML = NOVAMART_DATA.orders.map(o => `
+        <tr>
+          <td class="mono" style="color:var(--brand-cyan); font-weight:700;">${o.id}</td>
+          <td>
+            <div style="font-weight:700;">${o.customerName}</div>
+            <div style="font-size:0.75rem; color:#94a3b8;">${o.customerEmail}</div>
+          </td>
+          <td>${o.date}</td>
+          <td style="font-weight:700;">₹${o.totalAmount.toLocaleString('en-IN')}</td>
+          <td style="font-size:0.8rem;">${o.paymentMethod}</td>
+          <td><span class="badge-status ${o.status === 'Delivered' ? 'success' : 'warning'}">${o.status}</span></td>
+          <td>
+            <select onchange="updateOrderStatus('${o.id}', this.value)" style="background:#1e293b; color:white; border:1px solid var(--border-infra); padding:4px 8px; border-radius:4px; font-size:0.8rem;">
+              <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>Processing</option>
+              <option value="Packed" ${o.status === 'Packed' ? 'selected' : ''}>Packed</option>
+              <option value="Shipped" ${o.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+              <option value="Out for Delivery" ${o.status === 'Out for Delivery' ? 'selected' : ''}>Out for Delivery</option>
+              <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+              <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+          </td>
+        </tr>
+      `).join('');
+    });
+
+    function updateOrderStatus(orderId, newStatus) {
+      const o = NOVAMART_DATA.orders.find(ord => ord.id === orderId);
+      if (o) {
+        o.status = newStatus;
+        window.novaStore.showToast(`Order ${orderId} updated to "${newStatus}". Customer notified via SMS/Email!`, 'success');
+      }
+    }
+  </script>
+</body>
+</html>

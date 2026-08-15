@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div id="platform-top-banner"></div>
+  <header id="nova-header"></header>
+
+  <main class="store-container" style="margin-top:24px;">
+    <h1 style="font-size:1.8rem; font-weight:800; color:var(--brand-navy); margin-bottom:20px;">My Wishlist</h1>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:20px;" id="wishlist-grid">
+      <!-- Injected via JS -->
+    </div>
+  </main>
+
+  <footer id="nova-footer"></footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('customer');
+      window.novaApp.renderCustomerHeader();
+      window.novaApp.renderFooter();
+
+      renderWishlist();
+    });
+
+    function renderWishlist() {
+      const container = document.getElementById('wishlist-grid');
+      const wishIds = window.novaStore.wishlist;
+
+      if (wishIds.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:60px; background:white; border-radius:10px; border:1px solid var(--border-store);">
+            <h2>Your Wishlist is Empty ♡</h2>
+            <p style="color:var(--text-muted); margin-bottom:20px;">Explore items and save your favorites to your wishlist!</p>
+            <a href="products.html" class="btn-hero" style="display:inline-flex;">Explore Products</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = wishIds.map(id => {
+        const p = NOVAMART_DATA.products.find(prod => prod.id === id);
+        if (!p) return '';
+
+        return `
+          <div class="product-card">
+            <button class="product-wish-btn active" onclick="window.novaStore.toggleWishlist('${p.id}'); renderWishlist();">♥</button>
+            <a href="product-details.html?id=${p.id}">
+              <div class="product-img-wrapper"><img src="${p.image}" alt="${p.name}" /></div>
+              <div class="product-brand">${p.brand}</div>
+              <div class="product-title">${p.name}</div>
+              <div class="product-rating-row">
+                <span class="rating-badge">★ ${p.rating}</span>
+                <span class="rating-count">(${p.reviewsCount})</span>
+              </div>
+              <div class="product-price-row">
+                <span class="selling-price">₹${p.price.toLocaleString('en-IN')}</span>
+                <span class="original-price">₹${p.mrp.toLocaleString('en-IN')}</span>
+                <span class="discount-tag">${p.discount}% OFF</span>
+              </div>
+            </a>
+            <button class="btn-add-cart" onclick="window.novaStore.addToCart('${p.id}')">🛒 Move to Cart</button>
+          </div>
+        `;
+      }).join('');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div id="platform-top-banner"></div>
+  <header id="nova-header"></header>
+
+  <main class="store-container" style="margin-top:24px;">
+    <h1 style="font-size:1.8rem; font-weight:800; color:var(--brand-navy); margin-bottom:20px;">Secure Checkout</h1>
+
+    <!-- Progress Steps Line -->
+    <div style="display:flex; justify-content:space-between; max-width:800px; margin:0 auto 32px auto; position:relative;" id="checkout-steps-bar">
+      <div class="pipeline-step active" id="step-node-1"><div class="pipeline-circle">1</div><div class="pipeline-label">Address</div></div>
+      <div class="pipeline-step" id="step-node-2"><div class="pipeline-circle">2</div><div class="pipeline-label">Delivery</div></div>
+      <div class="pipeline-step" id="step-node-3"><div class="pipeline-circle">3</div><div class="pipeline-label">Payment</div></div>
+      <div class="pipeline-step" id="step-node-4"><div class="pipeline-circle">4</div><div class="pipeline-label">Confirmation</div></div>
+    </div>
+
+    <!-- Step Views Container -->
+    <div style="max-width:800px; margin:0 auto; background:white; border-radius:var(--radius-lg); padding:32px; border:1px solid var(--border-store); box-shadow:var(--shadow-sm);">
+      
+      <!-- STEP 1: Address Selection & Change Address -->
+      <div id="checkout-step-1">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h2 style="font-size:1.3rem; font-weight:800; color:var(--brand-navy);">1. Select Shipping Address</h2>
+          <button onclick="toggleNewAddressForm()" style="background:var(--brand-indigo); color:white; font-size:0.85rem; font-weight:700; padding:6px 14px; border-radius:6px;">
+            + Add New Address
+          </button>
+        </div>
+
+        <!-- Saved Addresses List -->
+        <div style="display:flex; flex-direction:column; gap:16px; margin-bottom:24px;" id="checkout-addresses-list">
+          <!-- Rendered via JS -->
+        </div>
+
+        <!-- Add/Change Address Form -->
+        <div id="new-address-form-box" style="display:none; background:#f8fafc; border:1px solid var(--border-store); border-radius:var(--radius-md); padding:20px; margin-bottom:24px;">
+          <h3 style="font-size:1rem; font-weight:800; color:var(--brand-navy); margin-bottom:12px;" id="addr-form-title">Add / Edit Delivery Address</h3>
+          <form onsubmit="saveCheckoutAddress(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <input type="hidden" id="addr-id" />
+            <div>
+              <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Full Name</label>
+              <input type="text" id="addr-name" placeholder="Karthick" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Mobile Number</label>
+              <input type="text" id="addr-phone" placeholder="+91 98765 43210" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Street Address / Building</label>
+              <input type="text" id="addr-street" placeholder="142 Nova Heights, Anna Nagar" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">City</label>
+              <input type="text" id="addr-city" placeholder="Chennai" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">State</label>
+              <input type="text" id="addr-state" placeholder="Tamil Nadu" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Pincode</label>
+              <input type="text" id="addr-pincode" placeholder="600040" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Address Type</label>
+              <select id="addr-type" style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;">
+                <option value="Home">Home (All Day)</option>
+                <option value="Work">Work (9 AM - 6 PM)</option>
+              </select>
+            </div>
+            <div style="grid-column:1/-1; display:flex; gap:10px;">
+              <button type="submit" class="btn-hero" style="background:var(--brand-emerald); color:white; padding:8px 20px;">Save & Deliver Here</button>
+              <button type="button" onclick="toggleNewAddressForm(false)" style="padding:8px 16px; font-weight:700;">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <button onclick="goToStep(2)" class="btn-hero" style="background:var(--brand-indigo); color:white; width:100%; justify-content:center;">
+          DELIVER TO SELECTED ADDRESS →
+        </button>
+      </div>
+
+      <!-- STEP 2: Delivery Speed -->
+      <div id="checkout-step-2" style="display:none;">
+        <h2 style="font-size:1.3rem; font-weight:800; color:var(--brand-navy); margin-bottom:16px;">2. Choose Delivery Speed</h2>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
+          <label style="border:1px solid var(--border-store); padding:16px; border-radius:8px; display:flex; align-items:center; gap:12px; cursor:pointer;">
+            <input type="radio" name="delivery-speed" value="standard" checked />
+            <div>
+              <div style="font-weight:700;">Standard FREE Delivery (Guaranteed Tomorrow by 8 PM)</div>
+              <div style="font-size:0.8rem; color:var(--brand-emerald); font-weight:600;">FREE for Novamart Members</div>
+            </div>
+          </label>
+          <label style="border:1px solid var(--border-store); padding:16px; border-radius:8px; display:flex; align-items:center; gap:12px; cursor:pointer;">
+            <input type="radio" name="delivery-speed" value="express" />
+            <div>
+              <div style="font-weight:700;">Express Morning Delivery (By 10 AM Tomorrow)</div>
+              <div style="font-size:0.8rem; color:var(--brand-navy); font-weight:600;">₹99 Shipping Charge</div>
+            </div>
+          </label>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <button onclick="goToStep(1)" style="padding:12px 24px; font-weight:700;">← Back</button>
+          <button onclick="goToStep(3)" class="btn-hero" style="flex:1; background:var(--brand-indigo); color:white; justify-content:center;">PROCEED TO PAYMENT →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Payment Options -->
+      <div id="checkout-step-3" style="display:none;">
+        <h2 style="font-size:1.3rem; font-weight:800; color:var(--brand-navy); margin-bottom:16px;">3. Select Payment Option</h2>
+        
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
+          <label style="border:1px solid var(--border-store); padding:14px; border-radius:8px; display:flex; align-items:center; gap:12px; cursor:pointer;">
+            <input type="radio" name="payment-method" value="upi" checked onchange="togglePaymentForm('upi')" />
+            <span style="font-weight:700;">Instant UPI (Google Pay, PhonePe, Paytm, BHIM)</span>
+          </label>
+          <div id="pay-form-upi" style="padding:12px 16px; background:#f8fafc; border-radius:6px; margin-left:24px;">
+            <input type="text" id="upi-id-input" placeholder="Enter VPA / UPI ID (e.g. karthick@okaxis)" style="width:100%; padding:8px 12px; border:1px solid var(--border-store); border-radius:6px;" value="karthick@okaxis" />
+          </div>
+
+          <label style="border:1px solid var(--border-store); padding:14px; border-radius:8px; display:flex; align-items:center; gap:12px; cursor:pointer;">
+            <input type="radio" name="payment-method" value="card" onchange="togglePaymentForm('card')" />
+            <span style="font-weight:700;">Credit / Debit Card</span>
+          </label>
+
+          <label style="border:1px solid var(--border-store); padding:14px; border-radius:8px; display:flex; align-items:center; gap:12px; cursor:pointer;">
+            <input type="radio" name="payment-method" value="cod" onchange="togglePaymentForm('cod')" />
+            <span style="font-weight:700;">Cash on Delivery (Pay upon arrival)</span>
+          </label>
+        </div>
+
+        <div style="display:flex; gap:16px;">
+          <button onclick="goToStep(2)" style="padding:12px 24px; font-weight:700;">← Back</button>
+          <button onclick="processPaymentAndConfirm()" class="btn-hero" style="flex:1; background:var(--brand-emerald); color:white; justify-content:center;">PAY & PLACE ORDER 🎉</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Confirmation Loader & Result -->
+      <div id="checkout-step-4" style="display:none; text-align:center; padding:40px 0;">
+        <div style="font-size:3.5rem; margin-bottom:12px;">🎉</div>
+        <h2 style="font-size:1.8rem; font-weight:800; color:var(--brand-emerald); margin-bottom:8px;">ORDER PLACED SUCCESSFULLY!</h2>
+        <p style="color:var(--text-muted); font-size:1rem; margin-bottom:12px;">
+          Order ID: <strong class="mono" style="color:var(--brand-navy);" id="new-order-id">NV-2026-0814-1024</strong>
+        </p>
+        <p style="font-size:0.9rem; color:var(--brand-navy); font-weight:600; margin-bottom:20px;" id="confirmed-delivery-addr"></p>
+        <a href="orders.html" class="btn-hero" style="background:var(--brand-indigo); color:white; display:inline-flex;">
+          TRACK ORDER STATUS →
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer id="nova-footer"></footer>
+
+  <script>
+    let selectedAddrId = null;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('customer');
+      window.novaApp.renderCustomerHeader();
+      window.novaApp.renderFooter();
+
+      renderCheckoutAddresses();
+    });
+
+    function renderCheckoutAddresses() {
+      const container = document.getElementById('checkout-addresses-list');
+      const addrs = window.novaStore.userProfile.addresses;
+
+      if (!selectedAddrId && addrs.length > 0) {
+        const def = addrs.find(a => a.isDefault) || addrs[0];
+        selectedAddrId = def.id;
+      }
+
+      container.innerHTML = addrs.map(a => `
+        <div style="border:${a.id === selectedAddrId ? '2px solid var(--brand-indigo)' : '1px solid var(--border-store)'}; background:${a.id === selectedAddrId ? 'rgba(79,70,229,0.04)' : 'white'}; padding:16px; border-radius:var(--radius-md); display:flex; justify-content:space-between; align-items:flex-start;">
+          <label style="display:flex; gap:12px; cursor:pointer; flex:1;">
+            <input type="radio" name="selected-address" value="${a.id}" ${a.id === selectedAddrId ? 'checked' : ''} onchange="selectAddress('${a.id}')" />
+            <div>
+              <div style="font-weight:800; color:var(--brand-navy);">${a.name} <span class="badge-status info" style="font-size:0.7rem;">${a.type}</span> ${a.isDefault ? '<span class="badge-status success" style="font-size:0.7rem;">DEFAULT</span>' : ''}</div>
+              <div style="font-size:0.9rem; color:var(--text-main); margin:4px 0;">${a.street}, ${a.city}, ${a.state} - ${a.pincode}</div>
+              <div style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">📱 Mobile Contact: ${a.phone}</div>
+            </div>
+          </label>
+          <button onclick="editAddressForm('${a.id}')" style="color:var(--brand-indigo); font-weight:700; font-size:0.8rem;">Edit</button>
+        </div>
+      `).join('');
+    }
+
+    function selectAddress(id) {
+      selectedAddrId = id;
+      window.novaStore.setDefaultAddress(id);
+      renderCheckoutAddresses();
+    }
+
+    function toggleNewAddressForm(show = true) {
+      document.getElementById('new-address-form-box').style.display = show ? 'block' : 'none';
+      if (show) {
+        document.getElementById('addr-id').value = '';
+        document.getElementById('addr-name').value = window.novaStore.userProfile.fullName;
+        document.getElementById('addr-phone').value = window.novaStore.userProfile.phone;
+        document.getElementById('addr-street').value = '';
+        document.getElementById('addr-city').value = '';
+        document.getElementById('addr-state').value = '';
+        document.getElementById('addr-pincode').value = '';
+      }
+    }
+
+    function editAddressForm(id) {
+      const a = window.novaStore.userProfile.addresses.find(addr => addr.id === id);
+      if (a) {
+        toggleNewAddressForm(true);
+        document.getElementById('addr-id').value = a.id;
+        document.getElementById('addr-name').value = a.name;
+        document.getElementById('addr-phone').value = a.phone;
+        document.getElementById('addr-street').value = a.street;
+        document.getElementById('addr-city').value = a.city;
+        document.getElementById('addr-state').value = a.state;
+        document.getElementById('addr-pincode').value = a.pincode;
+        document.getElementById('addr-type').value = a.type || 'Home';
+      }
+    }
+
+    function saveCheckoutAddress(e) {
+      e.preventDefault();
+      const addrObj = {
+        id: document.getElementById('addr-id').value || null,
+        name: document.getElementById('addr-name').value.trim(),
+        phone: document.getElementById('addr-phone').value.trim(),
+        street: document.getElementById('addr-street').value.trim(),
+        city: document.getElementById('addr-city').value.trim(),
+        state: document.getElementById('addr-state').value.trim(),
+        pincode: document.getElementById('addr-pincode').value.trim(),
+        type: document.getElementById('addr-type').value,
+        isDefault: true
+      };
+
+      window.novaStore.addOrUpdateAddress(addrObj);
+      selectedAddrId = addrObj.id;
+      toggleNewAddressForm(false);
+      renderCheckoutAddresses();
+    }
+
+    function goToStep(stepNum) {
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById(`checkout-step-${i}`).style.display = i === stepNum ? 'block' : 'none';
+        const node = document.getElementById(`step-node-${i}`);
+        if (i <= stepNum) {
+          node.classList.add('active');
+        } else {
+          node.classList.remove('active');
+        }
+      }
+    }
+
+    function togglePaymentForm(type) {
+      document.getElementById('pay-form-upi').style.display = type === 'upi' ? 'block' : 'none';
+    }
+
+    function processPaymentAndConfirm() {
+      const selectedAddr = window.novaStore.userProfile.addresses.find(a => a.id === selectedAddrId) || window.novaStore.getDefaultAddress();
+      const orderId = `NV-2026-0814-${Math.floor(1000 + Math.random() * 9000)}`;
+      document.getElementById('new-order-id').textContent = orderId;
+      document.getElementById('confirmed-delivery-addr').textContent = `Delivering to: ${selectedAddr.name}, ${selectedAddr.street}, ${selectedAddr.city} - ${selectedAddr.pincode} (Mobile: ${selectedAddr.phone})`;
+
+      // Add to mock orders with exact address & phone number
+      NOVAMART_DATA.orders.unshift({
+        id: orderId,
+        date: "14 Aug 2026",
+        customerName: selectedAddr.name,
+        customerEmail: window.novaStore.userProfile.email,
+        customerPhone: selectedAddr.phone,
+        items: window.novaStore.cart.map(i => {
+          const p = NOVAMART_DATA.products.find(prod => prod.id === i.id) || {};
+          return { productId: i.id, name: p.name || 'Product', price: p.price || 999, qty: i.qty, image: p.image || '' };
+        }),
+        totalAmount: 26990,
+        paymentMethod: "Instant UPI",
+        status: "Processing",
+        estimatedDelivery: "18 Aug 2026",
+        trackingStep: 1,
+        address: `${selectedAddr.street}, ${selectedAddr.city}, ${selectedAddr.state} - ${selectedAddr.pincode} (Contact Mobile: ${selectedAddr.phone})`
+      });
+
+      // Clear cart
+      window.novaStore.cart = [];
+      window.novaStore.saveState();
+
+      window.novaStore.showToast(`🟢 Microservice Event: Order ${orderId} committed to DB!`, 'success');
+      goToStep(4);
+    }
+  </script>
+</body>
+</html>

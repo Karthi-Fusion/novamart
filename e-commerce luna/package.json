@@ -1,0 +1,17 @@
+{
+  "name": "novamart-ecommerce",
+  "version": "1.0.0",
+  "description": "NOVAMART - Everything You Need. One Smart Store.",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y http-server . -p 3000 -o /index.html",
+    "start": "npx -y http-server . -p 3000 -o /index.html"
+  },
+  "keywords": [
+    "ecommerce",
+    "novamart",
+    "devops"
+  ],
+  "author": "NOVAMART Team",
+  "license": "ISC"
+}

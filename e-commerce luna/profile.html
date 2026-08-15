@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div id="platform-top-banner"></div>
+  <header id="nova-header"></header>
+
+  <main class="store-container" style="margin-top:24px;">
+    <h1 style="font-size:1.8rem; font-weight:800; color:var(--brand-navy); margin-bottom:20px;">My Account & Preferences</h1>
+
+    <div style="display:grid; grid-template-columns:250px 1fr; gap:24px;">
+      <!-- Profile Navigation Sidebar -->
+      <aside style="background:white; border-radius:var(--radius-md); padding:20px; border:1px solid var(--border-store); height:fit-content;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--border-store);">
+          <div style="width:48px; height:48px; border-radius:50%; background:var(--brand-indigo); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.2rem;" id="profile-avatar">K</div>
+          <div>
+            <div style="font-weight:800; color:var(--brand-navy);" id="profile-sidebar-name">Karthick</div>
+            <div style="font-size:0.78rem; color:var(--text-muted);" id="profile-sidebar-email">karthick@novamart.io</div>
+          </div>
+        </div>
+
+        <nav style="display:flex; flex-direction:column; gap:8px; font-weight:600; font-size:0.9rem;">
+          <a href="#personal-info" class="sidebar-nav-item active" style="color:var(--brand-navy);">👤 Personal Profile & Mobile</a>
+          <a href="#saved-addresses" class="sidebar-nav-item">🏠 Saved Addresses</a>
+          <a href="orders.html" class="sidebar-nav-item">📦 My Orders</a>
+          <a href="wishlist.html" class="sidebar-nav-item">♡ Saved Wishlist</a>
+        </nav>
+      </aside>
+
+      <!-- Account Main Details Panel -->
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        
+        <!-- SECTION 1: Personal Information & Mobile Number -->
+        <div style="background:white; border-radius:var(--radius-lg); padding:32px; border:1px solid var(--border-store);" id="personal-info">
+          <h2 style="font-size:1.3rem; font-weight:800; color:var(--brand-navy); margin-bottom:20px;">Personal Information & Contact Mobile</h2>
+          
+          <form onsubmit="handleProfileUpdate(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+            <div>
+              <label style="display:block; font-size:0.85rem; font-weight:700; color:var(--text-muted); margin-bottom:6px;">Full Name</label>
+              <input type="text" id="prof-fullname" required style="width:100%; padding:10px; border:1px solid var(--border-store); border-radius:6px;" />
+            </div>
+            <div>
+              <label style="display:block; font-size:0.85rem; font-weight:700; color:var(--text-muted); margin-bottom:6px;">Mobile Number</label>
+              <input type="text" id="prof-phone" required placeholder="+91 98765 43210" style="width:100%; padding:10px; border:1px solid var(--border-store); border-radius:6px;" />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label style="display:block; font-size:0.85rem; font-weight:700; color:var(--text-muted); margin-bottom:6px;">Email Address</label>
+              <input type="email" id="prof-email" readonly style="width:100%; padding:10px; border:1px solid var(--border-store); background:#f8fafc; border-radius:6px;" />
+            </div>
+            
+            <div style="grid-column:1/-1;">
+              <button type="submit" class="btn-hero" style="background:var(--brand-indigo); color:white;">Save Mobile Number & Profile</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- SECTION 2: Saved Delivery Addresses -->
+        <div style="background:white; border-radius:var(--radius-lg); padding:32px; border:1px solid var(--border-store);" id="saved-addresses">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="font-size:1.3rem; font-weight:800; color:var(--brand-navy);">Saved Delivery Addresses</h2>
+            <button onclick="toggleProfileAddressForm(true)" class="btn-hero" style="background:var(--brand-indigo); color:white; padding:6px 16px; font-size:0.85rem;">
+              + Add New Address
+            </button>
+          </div>
+
+          <!-- Add / Edit Address Form Box -->
+          <div id="profile-address-form-box" style="display:none; background:#f8fafc; border:1px solid var(--border-store); border-radius:var(--radius-md); padding:20px; margin-bottom:24px;">
+            <h3 style="font-size:1rem; font-weight:800; color:var(--brand-navy); margin-bottom:12px;" id="profile-addr-title">Add / Edit Address</h3>
+            <form onsubmit="handleProfileAddressSave(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <input type="hidden" id="p-addr-id" />
+              <div>
+                <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Name</label>
+                <input type="text" id="p-addr-name" placeholder="Karthick (Home)" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+              </div>
+              <div>
+                <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Contact Mobile Number</label>
+                <input type="text" id="p-addr-phone" placeholder="+91 98765 43210" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+              </div>
+              <div style="grid-column:1/-1;">
+                <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Street Address / Building</label>
+                <input type="text" id="p-addr-street" placeholder="142 Nova Heights, Anna Nagar" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+              </div>
+              <div>
+                <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">City</label>
+                <input type="text" id="p-addr-city" placeholder="Chennai" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+              </div>
+              <div>
+                <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">State</label>
+                <input type="text" id="p-addr-state" placeholder="Tamil Nadu" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+              </div>
+              <div>
+                <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Pincode</label>
+                <input type="text" id="p-addr-pincode" placeholder="600040" required style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;" />
+              </div>
+              <div>
+                <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Address Type</label>
+                <select id="p-addr-type" style="width:100%; padding:8px; border:1px solid var(--border-store); border-radius:6px;">
+                  <option value="Home">Home</option>
+                  <option value="Work">Work</option>
+                </select>
+              </div>
+              <div style="grid-column:1/-1; display:flex; gap:10px;">
+                <button type="submit" class="btn-hero" style="background:var(--brand-emerald); color:white; padding:8px 20px;">Save Address</button>
+                <button type="button" onclick="toggleProfileAddressForm(false)" style="padding:8px 16px; font-weight:700;">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Address Cards Grid -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px;" id="profile-addresses-grid">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer id="nova-footer"></footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('customer');
+      window.novaApp.renderCustomerHeader();
+      window.novaApp.renderFooter();
+
+      loadProfileData();
+    });
+
+    function loadProfileData() {
+      const prof = window.novaStore.userProfile;
+      document.getElementById('prof-fullname').value = prof.fullName;
+      document.getElementById('prof-phone').value = prof.phone;
+      document.getElementById('prof-email').value = prof.email;
+
+      document.getElementById('profile-sidebar-name').textContent = prof.fullName;
+      document.getElementById('profile-sidebar-email').textContent = prof.email;
+      document.getElementById('profile-avatar').textContent = prof.fullName.charAt(0).toUpperCase();
+
+      renderAddressesGrid();
+    }
+
+    function handleProfileUpdate(e) {
+      e.preventDefault();
+      const name = document.getElementById('prof-fullname').value.trim();
+      const phone = document.getElementById('prof-phone').value.trim();
+      window.novaStore.updateProfile(name, phone);
+      loadProfileData();
+    }
+
+    function renderAddressesGrid() {
+      const container = document.getElementById('profile-addresses-grid');
+      const addrs = window.novaStore.userProfile.addresses;
+
+      if (addrs.length === 0) {
+        container.innerHTML = `<div style="color:var(--text-muted);">No delivery addresses saved yet. Click "+ Add New Address" above.</div>`;
+        return;
+      }
+
+      container.innerHTML = addrs.map(a => `
+        <div style="border:1px solid var(--border-store); border-radius:var(--radius-md); padding:16px; position:relative; background:${a.isDefault ? 'rgba(79,70,229,0.03)' : 'white'};">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-weight:800; color:var(--brand-navy);">${a.name}</span>
+            <span class="badge-status info">${a.type}</span>
+          </div>
+          <div style="font-size:0.88rem; color:var(--text-main); margin-bottom:8px;">
+            ${a.street}, ${a.city}, ${a.state} - ${a.pincode}
+          </div>
+          <div style="font-size:0.82rem; color:var(--brand-navy); font-weight:700; margin-bottom:12px;">
+            📱 Mobile: ${a.phone}
+          </div>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:0.8rem;">
+            ${!a.isDefault ? `<button onclick="window.novaStore.setDefaultAddress('${a.id}'); renderAddressesGrid();" style="color:var(--brand-indigo); font-weight:700;">Set Default</button> •` : '<span class="badge-status success" style="font-size:0.7rem;">DEFAULT</span> •'}
+            <button onclick="editProfileAddress('${a.id}')" style="color:var(--brand-indigo); font-weight:700;">Edit</button> •
+            <button onclick="window.novaStore.deleteAddress('${a.id}'); renderAddressesGrid();" style="color:var(--brand-rose); font-weight:700;">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleProfileAddressForm(show = true) {
+      document.getElementById('profile-address-form-box').style.display = show ? 'block' : 'none';
+      if (show) {
+        document.getElementById('p-addr-id').value = '';
+        document.getElementById('p-addr-name').value = '';
+        document.getElementById('p-addr-phone').value = window.novaStore.userProfile.phone;
+        document.getElementById('p-addr-street').value = '';
+        document.getElementById('p-addr-city').value = '';
+        document.getElementById('p-addr-state').value = '';
+        document.getElementById('p-addr-pincode').value = '';
+      }
+    }
+
+    function editProfileAddress(id) {
+      const a = window.novaStore.userProfile.addresses.find(addr => addr.id === id);
+      if (a) {
+        toggleProfileAddressForm(true);
+        document.getElementById('p-addr-id').value = a.id;
+        document.getElementById('p-addr-name').value = a.name;
+        document.getElementById('p-addr-phone').value = a.phone;
+        document.getElementById('p-addr-street').value = a.street;
+        document.getElementById('p-addr-city').value = a.city;
+        document.getElementById('p-addr-state').value = a.state;
+        document.getElementById('p-addr-pincode').value = a.pincode;
+        document.getElementById('p-addr-type').value = a.type || 'Home';
+      }
+    }
+
+    function handleProfileAddressSave(e) {
+      e.preventDefault();
+      const addrObj = {
+        id: document.getElementById('p-addr-id').value || null,
+        name: document.getElementById('p-addr-name').value.trim(),
+        phone: document.getElementById('p-addr-phone').value.trim(),
+        street: document.getElementById('p-addr-street').value.trim(),
+        city: document.getElementById('p-addr-city').value.trim(),
+        state: document.getElementById('p-addr-state').value.trim(),
+        pincode: document.getElementById('p-addr-pincode').value.trim(),
+        type: document.getElementById('p-addr-type').value,
+        isDefault: window.novaStore.userProfile.addresses.length === 0
+      };
+
+      window.novaStore.addOrUpdateAddress(addrObj);
+      toggleProfileAddressForm(false);
+      renderAddressesGrid();
+    }
+  </script>
+</body>
+</html>

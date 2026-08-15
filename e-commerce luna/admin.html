@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — NOVAMART Operations</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body class="infra-mode">
+  <div id="platform-top-banner"></div>
+
+  <div class="infra-app-container">
+    <!-- Admin Sidebar -->
+    <aside class="infra-sidebar">
+      <div>
+        <div style="padding:20px; border-bottom:1px solid var(--border-infra); display:flex; align-items:center; gap:10px;">
+          <div class="brand-icon-box" style="width:34px; height:34px; font-size:1rem;">N</div>
+          <div>
+            <div style="font-weight:800; color:white; font-size:1.1rem;">NOVAMART</div>
+            <div style="font-size:0.7rem; color:var(--brand-cyan); font-weight:700;">ADMIN OPERATIONS</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav-list">
+          <a href="admin.html" class="sidebar-nav-item active">📊 Analytics Overview</a>
+          <a href="products-admin.html" class="sidebar-nav-item">📦 Product Catalog</a>
+          <a href="orders-admin.html" class="sidebar-nav-item">🛒 Order Fulfillment</a>
+          <a href="customers-admin.html" class="sidebar-nav-item">👥 Customers Directory</a>
+          <a href="inventory-admin.html" class="sidebar-nav-item">🏬 Inventory & SKUs</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="infra-main-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:white;">Operations & Sales Control Center</h1>
+          <p style="color:#94a3b8; font-size:0.9rem;">Real-time business performance analytics and catalog telemetry.</p>
+        </div>
+        <span class="badge-status success" style="padding:6px 14px;">🟢 Store Status: LIVE</span>
+      </div>
+
+      <!-- KPI Metrics Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Total Sales</div>
+          <div class="kpi-value" style="color:var(--brand-emerald);">₹12.8L</div>
+          <div class="kpi-status" style="color:var(--brand-emerald);">↑ +18.4% vs last month</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Total Orders</div>
+          <div class="kpi-value" style="color:var(--brand-cyan);">3,842</div>
+          <div class="kpi-status" style="color:var(--brand-cyan);">↑ 142 orders today</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Total Customers</div>
+          <div class="kpi-value">18,420</div>
+          <div class="kpi-status" style="color:var(--brand-emerald);">↑ 85 new signups</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Active Products</div>
+          <div class="kpi-value">12,580</div>
+          <div class="kpi-status">In 14 categories</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Low Stock Items</div>
+          <div class="kpi-value" style="color:var(--brand-amber);">38</div>
+          <div class="kpi-status" style="color:var(--brand-amber);">⚠️ Reorder required</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Pending Orders</div>
+          <div class="kpi-value" style="color:var(--brand-rose);">126</div>
+          <div class="kpi-status" style="color:var(--brand-rose);">Needs fulfillment</div>
+        </div>
+      </div>
+
+      <!-- Charts & Tables Grid -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+        <div class="ops-card">
+          <div class="ops-card-header">
+            <span class="ops-card-title">📈 Monthly Revenue Trend (2026)</span>
+          </div>
+          <div style="height:220px; display:flex; align-items:flex-end; justify-content:space-between; gap:12px; padding-top:20px;">
+            <div style="flex:1; background:var(--brand-indigo); height:40%; border-radius:4px 4px 0 0;" title="Jan: ₹6.2L"></div>
+            <div style="flex:1; background:var(--brand-indigo); height:55%; border-radius:4px 4px 0 0;" title="Feb: ₹8.1L"></div>
+            <div style="flex:1; background:var(--brand-indigo); height:70%; border-radius:4px 4px 0 0;" title="Mar: ₹9.8L"></div>
+            <div style="flex:1; background:var(--brand-indigo); height:65%; border-radius:4px 4px 0 0;" title="Apr: ₹9.1L"></div>
+            <div style="flex:1; background:var(--brand-indigo); height:85%; border-radius:4px 4px 0 0;" title="May: ₹11.4L"></div>
+            <div style="flex:1; background:var(--brand-cyan); height:100%; border-radius:4px 4px 0 0;" title="Jun: ₹12.8L"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#94a3b8; margin-top:8px;">
+            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+          </div>
+        </div>
+
+        <div class="ops-card">
+          <div class="ops-card-header">
+            <span class="ops-card-title">⚡ Top Category Breakdown</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;">
+                <span>Mobiles & Electronics</span><span class="mono">45% (₹5.76L)</span>
+              </div>
+              <div style="background:rgba(255,255,255,0.1); height:8px; border-radius:4px;"><div style="width:45%; background:var(--brand-cyan); height:100%; border-radius:4px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;">
+                <span>Laptops & Computers</span><span class="mono">28% (₹3.58L)</span>
+              </div>
+              <div style="background:rgba(255,255,255,0.1); height:8px; border-radius:4px;"><div style="width:28%; background:var(--brand-indigo); height:100%; border-radius:4px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;">
+                <span>Home & Appliances</span><span class="mono">18% (₹2.30L)</span>
+              </div>
+              <div style="background:rgba(255,255,255,0.1); height:8px; border-radius:4px;"><div style="width:18%; background:var(--brand-emerald); height:100%; border-radius:4px;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('admin');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOVAMART — Everything You Need. One Smart Store.</title>
+  <meta name="description" content="NOVAMART Online Store E-Commerce Platform supported by Automated Microservices DevOps Infrastructure.">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+
+  <!-- Top Banner Switcher -->
+  <div id="platform-top-banner"></div>
+
+  <!-- Header Placeholder -->
+  <header id="nova-header"></header>
+
+  <!-- Main Store Layout -->
+  <main class="store-container">
+
+    <!-- Hero Promotional Carousel -->
+    <section class="hero-carousel-wrapper" id="hero-carousel">
+      <div class="hero-slide hero-slide-1 active">
+        <div class="hero-content">
+          <span class="hero-tag">MEGA ELECTRONICS SALE</span>
+          <h1 class="hero-title">Up to 60% OFF On Premium Tech</h1>
+          <p class="hero-subtitle">Smartphones, Wireless Noise-Cancelling Headphones & Laptops.</p>
+          <a href="products.html?cat=electronics" class="btn-hero">Shop Now →</a>
+        </div>
+      </div>
+
+      <div class="hero-slide hero-slide-2">
+        <div class="hero-content">
+          <span class="hero-tag">SMARTPHONES OF THE WEEK</span>
+          <h1 class="hero-title">Starting From ₹9,999</h1>
+          <p class="hero-subtitle">Galaxy AI, Pro Cameras & Ultra-fast 5G connectivity.</p>
+          <a href="products.html?cat=mobiles" class="btn-hero">Explore Phones →</a>
+        </div>
+      </div>
+
+      <div class="hero-slide hero-slide-3">
+        <div class="hero-content">
+          <span class="hero-tag">UPGRADE YOUR WORKSPACE</span>
+          <h1 class="hero-title">Laptops • Monitors • Accessories</h1>
+          <p class="hero-subtitle">High-performance workstations for developers and creators.</p>
+          <a href="products.html?cat=laptops" class="btn-hero">Upgrade Workstation →</a>
+        </div>
+      </div>
+
+      <div class="hero-slide hero-slide-4">
+        <div class="hero-content">
+          <span class="hero-tag">HOME & KITCHEN DEALS</span>
+          <h1 class="hero-title">Everyday Essentials Best Prices</h1>
+          <p class="hero-subtitle">Smart Vacuum Cleaners, Air Fryers & Appliances.</p>
+          <a href="products.html?cat=home-kitchen" class="btn-hero">Explore Deals →</a>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <button class="carousel-btn prev" onclick="prevSlide()">❮</button>
+      <button class="carousel-btn next" onclick="nextSlide()">❯</button>
+
+      <div class="carousel-dots" id="carousel-dots">
+        <div class="dot active" onclick="goToSlide(0)"></div>
+        <div class="dot" onclick="goToSlide(1)"></div>
+        <div class="dot" onclick="goToSlide(2)"></div>
+        <div class="dot" onclick="goToSlide(3)"></div>
+      </div>
+    </section>
+
+    <!-- Category Section Grid -->
+    <section style="margin-bottom:40px;">
+      <div class="section-title-row">
+        <h2 class="section-h2">Shop By Categories</h2>
+        <a href="categories.html" class="view-all-link">View All Categories →</a>
+      </div>
+      <div class="category-grid" id="home-categories-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- Deals Of The Day Section -->
+    <section class="deals-banner-section">
+      <div class="deals-header">
+        <div>
+          <h2 style="font-size:1.6rem; font-weight:800;">⚡ DEALS OF THE DAY</h2>
+          <p style="font-size:0.9rem; opacity:0.9;">Handpicked flash discounts updated daily</p>
+        </div>
+        <div class="deals-timer">
+          ⏳ Ends in: <span id="deal-timer-clock">08h : 42m : 19s</span>
+        </div>
+      </div>
+      <div class="products-scroll-container" id="deals-products-scroll">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- Product Carousels: Sports & Fitness -->
+    <section style="margin-bottom:40px;">
+      <div class="section-title-row">
+        <h2 class="section-h2">⚽ Sports & Fitness Gear</h2>
+        <a href="products.html?cat=sports" class="view-all-link">Shop Sports →</a>
+      </div>
+      <div class="products-scroll-container" id="sports-scroll"></div>
+    </section>
+
+    <!-- Product Carousels: Best Sellers -->
+    <section style="margin-bottom:40px;">
+      <div class="section-title-row">
+        <h2 class="section-h2">Best Sellers</h2>
+        <a href="products.html?sort=bestseller" class="view-all-link">Explore All →</a>
+      </div>
+      <div class="products-scroll-container" id="bestsellers-scroll"></div>
+    </section>
+
+    <!-- Product Carousels: Daily Grocery & Supermarket -->
+    <section style="margin-bottom:40px;">
+      <div class="section-title-row">
+        <h2 class="section-h2">🛒 Daily Grocery & Supermarket</h2>
+        <a href="products.html?cat=grocery" class="view-all-link">Shop Grocery →</a>
+      </div>
+      <div class="products-scroll-container" id="grocery-scroll"></div>
+    </section>
+
+    <!-- Product Carousels: Fashion & Apparel -->
+    <section style="margin-bottom:40px;">
+      <div class="section-title-row">
+        <h2 class="section-h2">👗 Fashion & Apparel Picks</h2>
+        <a href="products.html?cat=fashion" class="view-all-link">Shop Fashion →</a>
+      </div>
+      <div class="products-scroll-container" id="fashion-scroll"></div>
+    </section>
+
+  </main>
+
+  <!-- Footer Placeholder -->
+  <footer id="nova-footer"></footer>
+
+  <script>
+    // Initialize Page Content
+    let currentSlide = 0;
+    let autoSlideInterval;
+
+    function renderSlide(index) {
+      const slides = document.querySelectorAll('.hero-slide');
+      const dots = document.querySelectorAll('.dot');
+      slides.forEach((s, i) => s.classList.toggle('active', i === index));
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+      currentSlide = index;
+    }
+
+    function nextSlide() {
+      const slides = document.querySelectorAll('.hero-slide');
+      renderSlide((currentSlide + 1) % slides.length);
+    }
+
+    function prevSlide() {
+      const slides = document.querySelectorAll('.hero-slide');
+      renderSlide((currentSlide - 1 + slides.length) % slides.length);
+    }
+
+    function goToSlide(i) {
+      renderSlide(i);
+    }
+
+    function startAutoSlide() {
+      autoSlideInterval = setInterval(nextSlide, 5000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('customer');
+      window.novaApp.renderCustomerHeader();
+      window.novaApp.renderFooter();
+
+      // Setup Hero Carousel
+      startAutoSlide();
+      const heroEl = document.getElementById('hero-carousel');
+      heroEl.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+      heroEl.addEventListener('mouseleave', startAutoSlide);
+
+      // Render Categories
+      const catContainer = document.getElementById('home-categories-grid');
+      catContainer.innerHTML = NOVAMART_DATA.categories.map(c => `
+        <a href="products.html?cat=${c.id}" class="category-card">
+          <div class="category-img-box"><img src="${c.image}" alt="${c.name}" /></div>
+          <div class="category-name">${c.name}</div>
+          <div class="category-price">From ₹${c.startingPrice.toLocaleString('en-IN')}</div>
+        </a>
+      `).join('');
+
+      // Helper function to render product card HTML
+      function createProductCardHTML(p) {
+        const isWish = window.novaStore.wishlist.includes(p.id);
+        return `
+          <div class="product-card">
+            ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+            <button class="product-wish-btn ${isWish ? 'active' : ''}" onclick="window.novaStore.toggleWishlist('${p.id}'); this.classList.toggle('active');">
+              ♥
+            </button>
+            <a href="product-details.html?id=${p.id}">
+              <div class="product-img-wrapper">
+                <img src="${p.image}" alt="${p.name}" />
+              </div>
+              <div class="product-brand">${p.brand}</div>
+              <div class="product-title">${p.name}</div>
+              <div class="product-rating-row">
+                <span class="rating-badge">★ ${p.rating}</span>
+                <span class="rating-count">(${p.reviewsCount.toLocaleString('en-IN')})</span>
+              </div>
+              <div class="product-price-row">
+                <span class="selling-price">₹${p.price.toLocaleString('en-IN')}</span>
+                <span class="original-price">₹${p.mrp.toLocaleString('en-IN')}</span>
+                <span class="discount-tag">${p.discount}% OFF</span>
+              </div>
+              <div class="delivery-info">🚚 ${p.deliveryText}</div>
+            </a>
+            <button class="btn-add-cart" onclick="window.novaStore.addToCart('${p.id}')">
+              🛒 Add to Cart
+            </button>
+          </div>
+        `;
+      }
+
+      // Render Deals Products Scroll
+      const dealsScroll = document.getElementById('deals-products-scroll');
+      dealsScroll.innerHTML = NOVAMART_DATA.products.filter(p => p.isDealOfDay).map(p => createProductCardHTML(p)).join('');
+
+      // Render Sports Carousel
+      const sportsProds = NOVAMART_DATA.products.filter(p => p.category === 'sports');
+      document.getElementById('sports-scroll').innerHTML = sportsProds.map(p => createProductCardHTML(p)).join('');
+
+      // Render Carousels
+      document.getElementById('bestsellers-scroll').innerHTML = NOVAMART_DATA.products.slice(0, 8).map(p => createProductCardHTML(p)).join('');
+      
+      // Render Grocery Carousel
+      const groceryProds = NOVAMART_DATA.products.filter(p => p.category === 'grocery');
+      document.getElementById('grocery-scroll').innerHTML = groceryProds.map(p => createProductCardHTML(p)).join('');
+
+      // Render Fashion Carousel
+      const fashionProds = NOVAMART_DATA.products.filter(p => p.category === 'fashion' || p.category === 'mens-fashion' || p.category === 'womens-fashion');
+      document.getElementById('fashion-scroll').innerHTML = fashionProds.map(p => createProductCardHTML(p)).join('');
+
+      // Flash Deals Countdown Timer
+      setInterval(() => {
+        const timerEl = document.getElementById('deal-timer-clock');
+        if (timerEl) {
+          const now = new Date();
+          const hrs = String(23 - now.getHours()).padStart(2, '0');
+          const mins = String(59 - now.getMinutes()).padStart(2, '0');
+          const secs = String(59 - now.getSeconds()).padStart(2, '0');
+          timerEl.textContent = `${hrs}h : ${mins}m : ${secs}s`;
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

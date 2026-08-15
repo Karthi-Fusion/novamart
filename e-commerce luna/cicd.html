@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CI/CD Pipeline — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body class="infra-mode">
+  <div id="platform-top-banner"></div>
+
+  <div class="infra-app-container">
+    <aside class="infra-sidebar">
+      <div>
+        <div style="padding:20px; border-bottom:1px solid var(--border-infra); display:flex; align-items:center; gap:10px;">
+          <div class="brand-icon-box" style="width:34px; height:34px; font-size:1rem; background:linear-gradient(135deg, var(--brand-cyan), var(--brand-indigo));">⚡</div>
+          <div>
+            <div style="font-weight:800; color:white; font-size:1.1rem;">StoreOps</div>
+            <div style="font-size:0.7rem; color:var(--brand-cyan); font-weight:700;">DEVOPS CONTROL v2.8</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav-list">
+          <a href="infrastructure.html" class="sidebar-nav-item">🗺️ Architecture Map</a>
+          <a href="deployments.html" class="sidebar-nav-item">🚀 Deployments</a>
+          <a href="cicd.html" class="sidebar-nav-item active">⚡ CI/CD Pipeline</a>
+          <a href="monitoring.html" class="sidebar-nav-item">📊 Real-Time Telemetry</a>
+          <a href="security.html" class="sidebar-nav-item">🔒 Security Center</a>
+          <a href="incidents.html" class="sidebar-nav-item">⚠️ Incidents (2)</a>
+          <a href="datacenter.html" class="sidebar-nav-item">🖥️ Data Center & DR</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="infra-main-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:white;">Continuous Integration & Delivery Pipeline</h1>
+          <p style="color:#94a3b8; font-size:0.9rem;">Automated build, linting, security scans, unit testing, and container deployment runner.</p>
+        </div>
+        <button onclick="runCICDPipelineAnimation()" class="btn-hero" style="background:var(--brand-indigo); color:white; padding:10px 20px;" id="btn-run-cicd">
+          ⚡ RUN PIPELINE
+        </button>
+      </div>
+
+      <!-- Animated Pipeline Track -->
+      <div class="ops-card">
+        <div class="ops-card-header">
+          <span class="ops-card-title">⚙️ Pipeline Stage Runner</span>
+          <span class="badge-status info" id="cicd-badge-status">Status: Idle</span>
+        </div>
+
+        <div class="pipeline-track" id="cicd-track-nodes">
+          <div class="pipeline-step" id="cicd-node-1"><div class="pipeline-circle">1</div><div class="pipeline-label">Git Push</div></div>
+          <div class="pipeline-step" id="cicd-node-2"><div class="pipeline-circle">2</div><div class="pipeline-label">Build</div></div>
+          <div class="pipeline-step" id="cicd-node-3"><div class="pipeline-circle">3</div><div class="pipeline-label">Unit Tests</div></div>
+          <div class="pipeline-step" id="cicd-node-4"><div class="pipeline-circle">4</div><div class="pipeline-label">Code Quality</div></div>
+          <div class="pipeline-step" id="cicd-node-5"><div class="pipeline-circle">5</div><div class="pipeline-label">Security Scan</div></div>
+          <div class="pipeline-step" id="cicd-node-6"><div class="pipeline-circle">6</div><div class="pipeline-label">Docker Build</div></div>
+          <div class="pipeline-step" id="cicd-node-7"><div class="pipeline-circle">7</div><div class="pipeline-label">Staging</div></div>
+          <div class="pipeline-step" id="cicd-node-8"><div class="pipeline-circle">8</div><div class="pipeline-label">Approval</div></div>
+          <div class="pipeline-step" id="cicd-node-9"><div class="pipeline-circle">9</div><div class="pipeline-label">Production</div></div>
+          <div class="pipeline-step" id="cicd-node-10"><div class="pipeline-circle">10</div><div class="pipeline-label">Health Check</div></div>
+        </div>
+
+        <!-- Real-time Console Log -->
+        <div style="background:#090d16; border-radius:var(--radius-md); padding:16px; border:1px solid var(--border-infra); font-family:var(--font-mono); font-size:0.82rem; color:#e2e8f0; height:180px; overflow-y:auto;" id="cicd-console-logs">
+          <div>[BUILD] Pipeline trigger listener ready on branch main...</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('infra');
+    });
+
+    function runCICDPipelineAnimation() {
+      const btn = document.getElementById('btn-run-cicd');
+      btn.disabled = true;
+      btn.textContent = '⚡ RUNNING PIPELINE...';
+
+      const consoleEl = document.getElementById('cicd-console-logs');
+      const badge = document.getElementById('cicd-badge-status');
+
+      const stages = [
+        "Commit main:a7f93b2 detected. Webhook triggered.",
+        "Compiling assets & bundled JS modules...",
+        "Running Jest unit test suite (142 tests passed in 1.4s)...",
+        "ESLint & SonarQube Code Quality checks passed (0 bugs, 0 vulnerabilities)...",
+        "Running Snyk & SAST vulnerability security scan...",
+        "Building Docker image novamart/app:v2.8.4-build142...",
+        "Deploying container to Staging environment k8s-staging-cluster...",
+        "Manual approval granted by DevOps Lead...",
+        "Promoting release to Production K8s cluster...",
+        "Verifying HTTP 200 /healthz endpoint. Pipeline Execution SUCCESS! 🎉"
+      ];
+
+      let idx = 0;
+      const timer = setInterval(() => {
+        if (idx < stages.length) {
+          document.getElementById(`cicd-node-${idx+1}`).classList.add('active', 'success');
+          consoleEl.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${stages[idx]}</div>`;
+          consoleEl.scrollTop = consoleEl.scrollHeight;
+          badge.textContent = `Stage ${idx+1}/10: ACTIVE`;
+          idx++;
+        } else {
+          clearInterval(timer);
+          btn.disabled = false;
+          btn.textContent = '✓ PIPELINE SUCCESS';
+          badge.textContent = 'Status: SUCCESS';
+          window.novaStore.showToast('🟢 CI/CD Pipeline completed with 100% test coverage!', 'success');
+        }
+      }, 900);
+    }
+  </script>
+</body>
+</html>

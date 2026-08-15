@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Center & Disaster Recovery — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body class="infra-mode">
+  <div id="platform-top-banner"></div>
+
+  <div class="infra-app-container">
+    <aside class="infra-sidebar">
+      <div>
+        <div style="padding:20px; border-bottom:1px solid var(--border-infra); display:flex; align-items:center; gap:10px;">
+          <div class="brand-icon-box" style="width:34px; height:34px; font-size:1rem; background:linear-gradient(135deg, var(--brand-cyan), var(--brand-indigo));">⚡</div>
+          <div>
+            <div style="font-weight:800; color:white; font-size:1.1rem;">StoreOps</div>
+            <div style="font-size:0.7rem; color:var(--brand-cyan); font-weight:700;">DEVOPS CONTROL v2.8</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav-list">
+          <a href="infrastructure.html" class="sidebar-nav-item">🗺️ Architecture Map</a>
+          <a href="deployments.html" class="sidebar-nav-item">🚀 Deployments</a>
+          <a href="cicd.html" class="sidebar-nav-item">⚡ CI/CD Pipeline</a>
+          <a href="monitoring.html" class="sidebar-nav-item">📊 Real-Time Telemetry</a>
+          <a href="security.html" class="sidebar-nav-item">🔒 Security Center</a>
+          <a href="incidents.html" class="sidebar-nav-item">⚠️ Incidents (2)</a>
+          <a href="datacenter.html" class="sidebar-nav-item active">🖥️ Data Center & DR</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="infra-main-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:white;">Data Center Racks & Disaster Recovery</h1>
+          <p style="color:#94a3b8; font-size:0.9rem;">On-Premise hybrid server rack telemetry, automated replication, and DR simulation.</p>
+        </div>
+        <button onclick="startDRSimulation()" class="btn-hero" style="background:var(--brand-indigo); color:white; padding:10px 20px;" id="btn-start-dr">
+          🔄 START DR SIMULATION
+        </button>
+      </div>
+
+      <!-- Environment Telemetry Gauges Grid -->
+      <div class="kpi-grid" style="margin-bottom:24px;">
+        <div class="kpi-card">
+          <div class="kpi-title">Rack Ambient Temp</div>
+          <div class="kpi-value" style="color:var(--brand-emerald);">21.4°C</div>
+          <div class="kpi-status">HVAC Chillers Optimal</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Power Usage</div>
+          <div class="kpi-value">14.2 kW</div>
+          <div class="kpi-status">UPS Backup Ready</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Network Throughput</div>
+          <div class="kpi-value" style="color:var(--brand-cyan);">10 Gbps</div>
+          <div class="kpi-status">Redundant Fiber Ring</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">RPO Target</div>
+          <div class="kpi-value">15 min</div>
+          <div class="kpi-status" style="color:var(--brand-emerald);">Actual: 2 min</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">RTO Target</div>
+          <div class="kpi-value">30 min</div>
+          <div class="kpi-status" style="color:var(--brand-emerald);">Actual: 8 min</div>
+        </div>
+      </div>
+
+      <!-- Visual Server Rack Display -->
+      <div class="ops-card">
+        <div class="ops-card-header">
+          <span class="ops-card-title">🖥️ NOVAMART Hybrid On-Premise Server Racks</span>
+          <span class="badge-status success">All 4 Racks Operational</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; padding:12px 0;">
+          <!-- Rack 1 -->
+          <div style="background:#1e293b; border:1px solid var(--border-infra); border-radius:8px; padding:16px;">
+            <div style="font-weight:800; color:var(--brand-cyan); margin-bottom:10px;">RACK 01: WEB NODES</div>
+            <div style="display:flex; flex-direction:column; gap:6px; font-size:0.8rem;">
+              <div style="background:#0f172a; padding:6px; border-radius:4px; display:flex; justify-content:space-between;"><span>Web-Pod-01</span><span style="color:var(--brand-emerald);">● 42%</span></div>
+              <div style="background:#0f172a; padding:6px; border-radius:4px; display:flex; justify-content:space-between;"><span>Web-Pod-02</span><span style="color:var(--brand-emerald);">● 38%</span></div>
+              <div style="background:#0f172a; padding:6px; border-radius:4px; display:flex; justify-content:space-between;"><span>Web-Pod-03</span><span style="color:var(--brand-emerald);">● 45%</span></div>
+            </div>
+          </div>
+
+          <!-- Rack 2 -->
+          <div style="background:#1e293b; border:1px solid var(--border-infra); border-radius:8px; padding:16px;">
+            <div style="font-weight:800; color:var(--brand-indigo); margin-bottom:10px;">RACK 02: DATABASE</div>
+            <div style="display:flex; flex-direction:column; gap:6px; font-size:0.8rem;">
+              <div style="background:#0f172a; padding:6px; border-radius:4px; display:flex; justify-content:space-between;"><span>Postgres Primary</span><span style="color:var(--brand-emerald);">● 54%</span></div>
+              <div style="background:#0f172a; padding:6px; border-radius:4px; display:flex; justify-content:space-between;"><span>Postgres Replica</span><span style="color:var(--brand-emerald);">● 22%</span></div>
+            </div>
+          </div>
+
+          <!-- Rack 3 -->
+          <div style="background:#1e293b; border:1px solid var(--border-infra); border-radius:8px; padding:16px;">
+            <div style="font-weight:800; color:var(--brand-amber); margin-bottom:10px;">RACK 03: CACHE & QUEUE</div>
+            <div style="display:flex; flex-direction:column; gap:6px; font-size:0.8rem;">
+              <div style="background:#0f172a; padding:6px; border-radius:4px; display:flex; justify-content:space-between;"><span>Redis Cluster</span><span style="color:var(--brand-emerald);">● 61%</span></div>
+              <div style="background:#0f172a; padding:6px; border-radius:4px; display:flex; justify-content:space-between;"><span>Kafka Brokers</span><span style="color:var(--brand-emerald);">● 30%</span></div>
+            </div>
+          </div>
+
+          <!-- Rack 4 -->
+          <div style="background:#1e293b; border:1px solid var(--border-infra); border-radius:8px; padding:16px;">
+            <div style="font-weight:800; color:var(--brand-emerald); margin-bottom:10px;">RACK 04: OPS & BACKUP</div>
+            <div style="display:flex; flex-direction:column; gap:6px; font-size:0.8rem;">
+              <div style="background:#0f172a; padding:6px; border-radius:4px; display:flex; justify-content:space-between;"><span>CI/CD Runner</span><span style="color:var(--brand-emerald);">● Idle</span></div>
+              <div style="background:#0f172a; padding:6px; border-radius:4px; display:flex; justify-content:space-between;"><span>Backup Storage</span><span style="color:var(--brand-emerald);">● Ready</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('infra');
+    });
+
+    function startDRSimulation() {
+      const btn = document.getElementById('btn-start-dr');
+      btn.disabled = true;
+      btn.textContent = '⏳ EXECUTING DR SIMULATION...';
+
+      window.novaStore.showToast('Initiating secondary region failover test...', 'warning');
+
+      setTimeout(() => {
+        window.novaStore.showToast('Snapshot NV-SNAP-20260814 restored to failover region.', 'info');
+      }, 1000);
+
+      setTimeout(() => {
+        window.novaStore.showToast('🟢 Disaster Recovery simulation SUCCESSFUL! RTO 4m 12s achieved.', 'success');
+        btn.disabled = false;
+        btn.textContent = '✓ DR SIMULATION COMPLETE';
+      }, 2200);
+    }
+  </script>
+</body>
+</html>

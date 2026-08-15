@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Production Deployments — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body class="infra-mode">
+  <div id="platform-top-banner"></div>
+
+  <div class="infra-app-container">
+    <aside class="infra-sidebar">
+      <div>
+        <div style="padding:20px; border-bottom:1px solid var(--border-infra); display:flex; align-items:center; gap:10px;">
+          <div class="brand-icon-box" style="width:34px; height:34px; font-size:1rem; background:linear-gradient(135deg, var(--brand-cyan), var(--brand-indigo));">⚡</div>
+          <div>
+            <div style="font-weight:800; color:white; font-size:1.1rem;">StoreOps</div>
+            <div style="font-size:0.7rem; color:var(--brand-cyan); font-weight:700;">DEVOPS CONTROL v2.8</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav-list">
+          <a href="infrastructure.html" class="sidebar-nav-item">🗺️ Architecture Map</a>
+          <a href="deployments.html" class="sidebar-nav-item active">🚀 Deployments</a>
+          <a href="cicd.html" class="sidebar-nav-item">⚡ CI/CD Pipeline</a>
+          <a href="monitoring.html" class="sidebar-nav-item">📊 Real-Time Telemetry</a>
+          <a href="security.html" class="sidebar-nav-item">🔒 Security Center</a>
+          <a href="incidents.html" class="sidebar-nav-item">⚠️ Incidents (2)</a>
+          <a href="datacenter.html" class="sidebar-nav-item">🖥️ Data Center & DR</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="infra-main-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:white;">Production Deployment Control</h1>
+          <p style="color:#94a3b8; font-size:0.9rem;">Zero-downtime blue/green release orchestration and automated verification.</p>
+        </div>
+        <button onclick="startDeploymentSimulation()" class="btn-hero" style="background:var(--brand-emerald); color:white; padding:10px 20px;" id="btn-start-deploy">
+          🚀 DEPLOY TO PRODUCTION (v2.8.4)
+        </button>
+      </div>
+
+      <!-- Release Badges Card -->
+      <div class="ops-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+          <div>
+            <div style="font-size:0.8rem; color:#94a3b8; font-weight:700;">CURRENT PRODUCTION VERSION</div>
+            <div style="font-size:2.2rem; font-weight:800; color:var(--brand-cyan);" class="mono" id="current-prod-version">v2.8.3</div>
+          </div>
+          <div>
+            <div style="font-size:0.8rem; color:#94a3b8; font-weight:700;">TARGET RELEASE VERSION</div>
+            <div style="font-size:2.2rem; font-weight:800; color:var(--brand-emerald);" class="mono">v2.8.4</div>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <span class="badge-status success">✓ Backup Verified</span>
+            <span class="badge-status success">✓ Tests Passed (142/142)</span>
+            <span class="badge-status success">✓ Security Scan</span>
+            <span class="badge-status success">✓ DB Migration Check</span>
+            <span class="badge-status success">✓ Health Check Passed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Multi-Step Deployment Pipeline Visualizer -->
+      <div class="ops-card">
+        <div class="ops-card-header">
+          <span class="ops-card-title">🔄 Zero-Downtime Deployment Workflow</span>
+          <span class="badge-status info" id="deploy-stage-badge">Status: Ready</span>
+        </div>
+
+        <div class="pipeline-track" id="deploy-steps-track">
+          <div class="pipeline-step" id="dp-step-1"><div class="pipeline-circle">1</div><div class="pipeline-label">Pre-check</div></div>
+          <div class="pipeline-step" id="dp-step-2"><div class="pipeline-circle">2</div><div class="pipeline-label">Backup</div></div>
+          <div class="pipeline-step" id="dp-step-3"><div class="pipeline-circle">3</div><div class="pipeline-label">Build</div></div>
+          <div class="pipeline-step" id="dp-step-4"><div class="pipeline-circle">4</div><div class="pipeline-label">Security</div></div>
+          <div class="pipeline-step" id="dp-step-5"><div class="pipeline-circle">5</div><div class="pipeline-label">Deploy</div></div>
+          <div class="pipeline-step" id="dp-step-6"><div class="pipeline-circle">6</div><div class="pipeline-label">Health Check</div></div>
+          <div class="pipeline-step" id="dp-step-7"><div class="pipeline-circle">7</div><div class="pipeline-label">Traffic Shift</div></div>
+          <div class="pipeline-step" id="dp-step-8"><div class="pipeline-circle">🎉</div><div class="pipeline-label">SUCCESS</div></div>
+        </div>
+
+        <!-- Terminal Deployment Output -->
+        <div style="background:#090d16; border-radius:var(--radius-md); padding:16px; border:1px solid var(--border-infra); font-family:var(--font-mono); font-size:0.82rem; color:#e2e8f0; height:160px; overflow-y:auto;" id="deploy-console-output">
+          <div>[INFO] Standby for production release v2.8.4...</div>
+        </div>
+      </div>
+
+      <!-- Deployment History Table -->
+      <div class="ops-card">
+        <div class="ops-card-header">
+          <span class="ops-card-title">📜 Deployment Release History</span>
+        </div>
+        <table class="nova-table">
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Status</th>
+              <th>Deployed At</th>
+              <th>Duration</th>
+              <th>Triggered By</th>
+              <th>Commit Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono" style="color:var(--brand-cyan); font-weight:700;">v2.8.3</td>
+              <td><span class="badge-status success">Active in Prod</span></td>
+              <td>14 Aug 2026 10:30 AM</td>
+              <td>2m 14s</td>
+              <td>DevOps Lead</td>
+              <td>feat(checkout): Add Instant UPI QR integration (#412)</td>
+            </tr>
+            <tr>
+              <td class="mono" style="color:#94a3b8;">v2.8.2</td>
+              <td><span class="badge-status success">Success</span></td>
+              <td>12 Aug 2026 04:15 PM</td>
+              <td>1m 58s</td>
+              <td>SRE Engineer</td>
+              <td>fix(search): Optimize elasticsearch index cache (#408)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('infra');
+    });
+
+    function startDeploymentSimulation() {
+      const btn = document.getElementById('btn-start-deploy');
+      btn.disabled = true;
+      btn.textContent = '⏳ DEPLOYING v2.8.4...';
+
+      const consoleEl = document.getElementById('deploy-console-output');
+      const badge = document.getElementById('deploy-stage-badge');
+
+      const stages = [
+        { step: 1, text: "Running pre-flight environment checks & dependency inspection...", label: "Pre-check Passed" },
+        { step: 2, text: "Taking PostgreSQL automated snapshot backup NV-SNAP-20260814...", label: "Backup Created" },
+        { step: 3, text: "Building Docker container image novamart-app:v2.8.4...", label: "Build Complete" },
+        { step: 4, text: "Executing container image security vulnerability scan (Trivy)...", label: "Security Clean" },
+        { step: 5, text: "Rolling out blue/green Kubernetes deployment to worker nodes...", label: "Pods Deployed" },
+        { step: 6, text: "Verifying container HTTP GET /healthz endpoint readiness...", label: "Health Check OK" },
+        { step: 7, text: "Shifting 100% ingress traffic from v2.8.3 to v2.8.4...", label: "Traffic Validated" },
+        { step: 8, text: "PRODUCTION DEPLOYMENT SUCCESSFUL! Release v2.8.4 is LIVE! 🎉", label: "v2.8.4 Active" }
+      ];
+
+      let idx = 0;
+      const interval = setInterval(() => {
+        if (idx < stages.length) {
+          const s = stages[idx];
+          document.getElementById(`dp-step-${s.step}`).classList.add('active', 'success');
+          consoleEl.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${s.text}</div>`;
+          consoleEl.scrollTop = consoleEl.scrollHeight;
+          badge.textContent = `Status: ${s.label}`;
+          idx++;
+        } else {
+          clearInterval(interval);
+          document.getElementById('current-prod-version').textContent = 'v2.8.4';
+          btn.textContent = '✓ RELEASED v2.8.4';
+          btn.style.background = 'var(--brand-cyan)';
+          window.novaStore.showToast('🟢 Production Deployment v2.8.4 completed successfully!', 'success');
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

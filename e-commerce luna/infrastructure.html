@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOVAMART Infrastructure Control Center</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body class="infra-mode">
+  <div id="platform-top-banner"></div>
+
+  <div class="infra-app-container">
+    <!-- Engineer Navigation Sidebar -->
+    <aside class="infra-sidebar">
+      <div>
+        <div style="padding:20px; border-bottom:1px solid var(--border-infra); display:flex; align-items:center; gap:10px;">
+          <div class="brand-icon-box" style="width:34px; height:34px; font-size:1rem; background:linear-gradient(135deg, var(--brand-cyan), var(--brand-indigo));">⚡</div>
+          <div>
+            <div style="font-weight:800; color:white; font-size:1.1rem;">StoreOps</div>
+            <div style="font-size:0.7rem; color:var(--brand-cyan); font-weight:700;">DEVOPS CONTROL v2.8</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav-list">
+          <a href="infrastructure.html" class="sidebar-nav-item active">🗺️ Architecture Map</a>
+          <a href="deployments.html" class="sidebar-nav-item">🚀 Deployments</a>
+          <a href="cicd.html" class="sidebar-nav-item">⚡ CI/CD Pipeline</a>
+          <a href="monitoring.html" class="sidebar-nav-item">📊 Real-Time Telemetry</a>
+          <a href="security.html" class="sidebar-nav-item">🔒 Security Center</a>
+          <a href="incidents.html" class="sidebar-nav-item">⚠️ Incidents (2)</a>
+          <a href="datacenter.html" class="sidebar-nav-item">🖥️ Data Center & DR</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="infra-main-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:white;">E-Commerce Infrastructure Topology</h1>
+          <p style="color:#94a3b8; font-size:0.9rem;">Live microservices map, cluster nodes, and distributed database cluster.</p>
+        </div>
+        <span class="badge-status success" style="padding:6px 14px;">🟢 Production Status: OPERATIONAL</span>
+      </div>
+
+      <!-- Infrastructure KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Production Status</div>
+          <div class="kpi-value" style="color:var(--brand-emerald);">OPERATIONAL</div>
+          <div class="kpi-status" style="color:var(--brand-emerald);">✓ All Clusters Healthy</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Active Servers</div>
+          <div class="kpi-value">24</div>
+          <div class="kpi-status">AWS / On-Prem Nodes</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Uptime SLA</div>
+          <div class="kpi-value" style="color:var(--brand-cyan);">99.98%</div>
+          <div class="kpi-status">Target: 99.95%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Cluster CPU</div>
+          <div class="kpi-value">42%</div>
+          <div class="kpi-status" style="color:var(--brand-emerald);">Normal Range</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Cluster Memory</div>
+          <div class="kpi-value" style="color:var(--brand-amber);">61%</div>
+          <div class="kpi-status" style="color:var(--brand-amber);">Moderate Utilization</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Security Score</div>
+          <div class="kpi-value" style="color:var(--brand-emerald);">94/100</div>
+          <div class="kpi-status" style="color:var(--brand-emerald);">SOC2 Compliant</div>
+        </div>
+      </div>
+
+      <!-- Interactive Microservices Architecture Map -->
+      <div class="ops-card">
+        <div class="ops-card-header">
+          <span class="ops-card-title">🌐 Interactive E-Commerce Microservices Architecture</span>
+          <span style="font-size:0.8rem; color:#94a3b8;">Click any microservice node for live metrics & telemetry logs</span>
+        </div>
+
+        <div class="arch-map-container">
+          <!-- Layer 1: Ingress -->
+          <div class="arch-layer">
+            <div class="arch-node" style="border-color:var(--brand-cyan);">
+              <div style="font-size:1.4rem;">👥</div>
+              <div style="font-weight:700;">NOVAMART CUSTOMERS</div>
+              <div style="font-size:0.75rem; color:#94a3b8;">Global Users</div>
+            </div>
+          </div>
+          <div class="arch-arrow">↓</div>
+
+          <!-- Layer 2: CDN -->
+          <div class="arch-layer">
+            <div class="arch-node" style="border-color:var(--brand-indigo);">
+              <div style="font-size:1.4rem;">🌐</div>
+              <div style="font-weight:700;">GLOBAL CDN</div>
+              <div style="font-size:0.75rem; color:#94a3b8;">Cloudflare Edge</div>
+            </div>
+          </div>
+          <div class="arch-arrow">↓</div>
+
+          <!-- Layer 3: Load Balancer & Web Servers -->
+          <div class="arch-layer">
+            <div class="arch-node" style="border-color:var(--brand-emerald);">
+              <div style="font-size:1.4rem;">⚖️</div>
+              <div style="font-weight:700;">LOAD BALANCER</div>
+              <div style="font-size:0.75rem; color:#94a3b8;">HAProxy Cluster</div>
+            </div>
+            <div class="arch-node" style="border-color:var(--brand-emerald);">
+              <div style="font-size:1.4rem;">🖥️</div>
+              <div style="font-weight:700;">WEB SERVERS</div>
+              <div style="font-size:0.75rem; color:#94a3b8;">Nginx Pod Replicas</div>
+            </div>
+          </div>
+          <div class="arch-arrow">↓</div>
+
+          <!-- Layer 4: API Gateway -->
+          <div class="arch-layer">
+            <div class="arch-node" style="border-color:var(--brand-cyan); min-width:240px;">
+              <div style="font-size:1.4rem;">🚪</div>
+              <div style="font-weight:700;">API GATEWAY</div>
+              <div style="font-size:0.75rem; color:#94a3b8;">Kong Gateway (Rate Limits & Auth)</div>
+            </div>
+          </div>
+          <div class="arch-arrow">↓</div>
+
+          <!-- Layer 5: Microservices Cluster -->
+          <div class="arch-layer" id="microservices-nodes-grid">
+            <!-- Microservice Nodes Injected via JS -->
+          </div>
+          <div class="arch-arrow">↓</div>
+
+          <!-- Layer 6: Data Tier -->
+          <div class="arch-layer">
+            <div class="arch-node" style="border-color:var(--brand-indigo);">
+              <div style="font-size:1.4rem;">🗄️</div>
+              <div style="font-weight:700;">POSTGRESQL DB</div>
+              <div style="font-size:0.75rem; color:#94a3b8;">Primary / Replica Cluster</div>
+            </div>
+            <div class="arch-node" style="border-color:var(--brand-amber);">
+              <div style="font-size:1.4rem;">⚡</div>
+              <div style="font-weight:700;">REDIS CACHE</div>
+              <div style="font-size:0.75rem; color:#94a3b8;">Session & Product Cache</div>
+            </div>
+            <div class="arch-node" style="border-color:var(--brand-rose);">
+              <div style="font-size:1.4rem;">📬</div>
+              <div style="font-weight:700;">MESSAGE QUEUE</div>
+              <div style="font-size:0.75rem; color:#94a3b8;">Apache Kafka Order Saga</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Service Telemetry Modal -->
+  <div id="service-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:680px;">
+      <span class="modal-close-btn" onclick="document.getElementById('service-modal').classList.remove('active')">&times;</span>
+      <h2 style="font-size:1.4rem; font-weight:800; color:white; margin-bottom:4px;" id="modal-srv-name">Microservice Details</h2>
+      <div style="font-size:0.85rem; color:var(--brand-cyan); margin-bottom:20px;" id="modal-srv-cat">Category</div>
+
+      <div class="kpi-grid" style="margin-bottom:20px;">
+        <div class="kpi-card"><div class="kpi-title">CPU</div><div class="kpi-value" id="modal-srv-cpu">0%</div></div>
+        <div class="kpi-card"><div class="kpi-title">Memory</div><div class="kpi-value" id="modal-srv-mem">0 MB</div></div>
+        <div class="kpi-card"><div class="kpi-title">Requests / sec</div><div class="kpi-value" id="modal-srv-req">0/s</div></div>
+        <div class="kpi-card"><div class="kpi-title">Latency</div><div class="kpi-value" id="modal-srv-lat">0ms</div></div>
+      </div>
+
+      <div style="background:#090d16; border-radius:var(--radius-md); padding:16px; border:1px solid var(--border-infra); font-family:var(--font-mono); font-size:0.8rem; color:#e2e8f0; max-height:180px; overflow-y:auto;">
+        <div style="color:#94a3b8; font-weight:700; margin-bottom:8px;">Live Container Stdout Logs:</div>
+        <div id="modal-srv-logs"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('infra');
+
+      const grid = document.getElementById('microservices-nodes-grid');
+      grid.innerHTML = NOVAMART_DATA.microservices.map(s => `
+        <div class="arch-node" onclick="openServiceModal('${s.id}')" style="border-color:${s.status === 'Warning' ? 'var(--brand-amber)' : 'var(--brand-indigo)'}">
+          <div style="font-weight:700; font-size:0.95rem;">${s.name}</div>
+          <div style="font-size:0.75rem; color:#94a3b8;">${s.category}</div>
+          <div style="font-size:0.7rem; color:${s.status === 'Warning' ? 'var(--brand-amber)' : 'var(--brand-emerald)'}; margin-top:4px; font-weight:700;">
+            ${s.status} (${s.latency})
+          </div>
+        </div>
+      `).join('');
+    });
+
+    function openServiceModal(serviceId) {
+      const s = NOVAMART_DATA.microservices.find(srv => srv.id === serviceId);
+      if (!s) return;
+
+      document.getElementById('modal-srv-name').textContent = s.name;
+      document.getElementById('modal-srv-cat').textContent = `${s.category} • Status: ${s.status}`;
+      document.getElementById('modal-srv-cpu').textContent = s.cpu;
+      document.getElementById('modal-srv-mem').textContent = s.memory;
+      document.getElementById('modal-srv-req').textContent = s.requests;
+      document.getElementById('modal-srv-lat').textContent = s.latency;
+
+      document.getElementById('modal-srv-logs').innerHTML = s.logs.map(l => `<div>[INFO ${new Date().toLocaleTimeString()}] ${l}</div>`).join('');
+
+      document.getElementById('service-modal').classList.add('active');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incident Management — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body class="infra-mode">
+  <div id="platform-top-banner"></div>
+
+  <div class="infra-app-container">
+    <aside class="infra-sidebar">
+      <div>
+        <div style="padding:20px; border-bottom:1px solid var(--border-infra); display:flex; align-items:center; gap:10px;">
+          <div class="brand-icon-box" style="width:34px; height:34px; font-size:1rem; background:linear-gradient(135deg, var(--brand-cyan), var(--brand-indigo));">⚡</div>
+          <div>
+            <div style="font-weight:800; color:white; font-size:1.1rem;">StoreOps</div>
+            <div style="font-size:0.7rem; color:var(--brand-cyan); font-weight:700;">DEVOPS CONTROL v2.8</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav-list">
+          <a href="infrastructure.html" class="sidebar-nav-item">🗺️ Architecture Map</a>
+          <a href="deployments.html" class="sidebar-nav-item">🚀 Deployments</a>
+          <a href="cicd.html" class="sidebar-nav-item">⚡ CI/CD Pipeline</a>
+          <a href="monitoring.html" class="sidebar-nav-item">📊 Real-Time Telemetry</a>
+          <a href="security.html" class="sidebar-nav-item">🔒 Security Center</a>
+          <a href="incidents.html" class="sidebar-nav-item active">⚠️ Incidents (2)</a>
+          <a href="datacenter.html" class="sidebar-nav-item">🖥️ Data Center & DR</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="infra-main-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:white;">Incident Management & Remediation</h1>
+          <p style="color:#94a3b8; font-size:0.9rem;">Automated PagerDuty alerts, P1 triage, and resolution workflows.</p>
+        </div>
+      </div>
+
+      <!-- Active P1 Incident Details -->
+      <div class="ops-card" style="border-color:var(--brand-rose);">
+        <div class="ops-card-header">
+          <div>
+            <span class="badge-status danger">P1 HIGH SEVERITY</span>
+            <span class="mono" style="color:white; font-weight:800; margin-left:8px;">INC-2026-0814</span>
+            <h2 style="color:white; font-size:1.4rem; margin-top:4px;">Payment Service High Latency</h2>
+          </div>
+          <button onclick="resolveIncidentSimulation()" class="btn-hero" style="background:var(--brand-emerald); color:white; padding:8px 16px;" id="btn-resolve-inc">
+            🛠️ MITIGATE & RESOLVE INCIDENT
+          </button>
+        </div>
+
+        <!-- Workflow Visualizer -->
+        <div class="pipeline-track" style="margin-bottom:20px;">
+          <div class="pipeline-step active success"><div class="pipeline-circle">✓</div><div class="pipeline-label">Detected</div></div>
+          <div class="pipeline-step active success"><div class="pipeline-circle">✓</div><div class="pipeline-label">Alert</div></div>
+          <div class="pipeline-step active success"><div class="pipeline-circle">✓</div><div class="pipeline-label">Engineer Notified</div></div>
+          <div class="pipeline-step active" id="inc-step-investigating"><div class="pipeline-circle">🔍</div><div class="pipeline-label">Investigating</div></div>
+          <div class="pipeline-step" id="inc-step-mitigation"><div class="pipeline-circle">🛠️</div><div class="pipeline-label">Mitigation</div></div>
+          <div class="pipeline-step" id="inc-step-recovery"><div class="pipeline-circle">🔄</div><div class="pipeline-label">Recovery</div></div>
+          <div class="pipeline-step" id="inc-step-resolved"><div class="pipeline-circle">🎉</div><div class="pipeline-label">Resolved</div></div>
+        </div>
+
+        <div style="background:#090d16; padding:16px; border-radius:6px; border:1px solid var(--border-infra); font-size:0.88rem; color:#e2e8f0;">
+          <strong>Summary:</strong> Bank API gateway timeout causing payment retries. Auto-routing to fallback secondary payment gateway in progress.
+        </div>
+      </div>
+
+      <!-- Incident Audit Log Table -->
+      <div class="ops-card">
+        <div class="ops-card-header">
+          <span class="ops-card-title">📜 Historical Incident Audit Log</span>
+        </div>
+        <table class="nova-table">
+          <thead>
+            <tr>
+              <th>Incident ID</th>
+              <th>Issue Summary</th>
+              <th>Severity</th>
+              <th>Status</th>
+              <th>Timestamp</th>
+              <th>Resolution Time</th>
+            </tr>
+          </thead>
+          <tbody id="incidents-table-tbody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('infra');
+
+      const tbody = document.getElementById('incidents-table-tbody');
+      tbody.innerHTML = NOVAMART_DATA.incidents.map(inc => `
+        <tr>
+          <td class="mono" style="color:var(--brand-cyan); font-weight:700;">${inc.id}</td>
+          <td style="font-weight:700;">${inc.title}</td>
+          <td><span class="badge-status ${inc.severity === 'P1' ? 'danger' : 'warning'}">${inc.severity}</span></td>
+          <td><span class="badge-status ${inc.status === 'Resolved' ? 'success' : 'warning'}" id="status-tag-${inc.id}">${inc.status}</span></td>
+          <td>${inc.timestamp}</td>
+          <td>${inc.resolutionTime}</td>
+        </tr>
+      `).join('');
+    });
+
+    function resolveIncidentSimulation() {
+      const btn = document.getElementById('btn-resolve-inc');
+      btn.disabled = true;
+      btn.textContent = '⏳ MITIGATING & REROUTING...';
+
+      setTimeout(() => {
+        document.getElementById('inc-step-mitigation').classList.add('active', 'success');
+      }, 600);
+
+      setTimeout(() => {
+        document.getElementById('inc-step-recovery').classList.add('active', 'success');
+      }, 1200);
+
+      setTimeout(() => {
+        document.getElementById('inc-step-resolved').classList.add('active', 'success');
+        document.getElementById('status-tag-INC-2026-0814').className = 'badge-status success';
+        document.getElementById('status-tag-INC-2026-0814').textContent = 'Resolved';
+        btn.textContent = '✓ INCIDENT RESOLVED';
+        window.novaStore.showToast('🟢 Incident INC-2026-0814 successfully mitigated & resolved!', 'success');
+      }, 1800);
+    }
+  </script>
+</body>
+</html>

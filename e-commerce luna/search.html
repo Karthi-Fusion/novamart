@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Products — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div id="platform-top-banner"></div>
+  <header id="nova-header"></header>
+
+  <main class="store-container" style="margin-top:24px;">
+    <div style="background:white; border-radius:var(--radius-lg); padding:24px; border:1px solid var(--border-store); margin-bottom:24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:16px;">
+        <h1 style="font-size:1.5rem; font-weight:800; color:var(--brand-navy);" id="search-heading">Search Results</h1>
+        <div style="font-size:0.9rem; font-weight:600; color:var(--text-muted);">
+          Sort By:
+          <select id="search-sort-select" onchange="applySearchSort()" style="padding:6px 12px; border-radius:6px; border:1px solid var(--border-store); outline:none;">
+            <option value="relevance">Relevance</option>
+            <option value="price-low">Price: Low → High</option>
+            <option value="price-high">Price: High → Low</option>
+            <option value="rating">Customer Rating</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Popular Query Tags -->
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:0.85rem;">
+        <span style="color:var(--text-muted); font-weight:700;">Popular Searches:</span>
+        <button class="badge-status success" onclick="setSearchQuery('laptop')">laptop</button>
+        <button class="badge-status success" onclick="setSearchQuery('smartphone')">smartphone</button>
+        <button class="badge-status success" onclick="setSearchQuery('headphones')">headphones</button>
+        <button class="badge-status success" onclick="setSearchQuery('samsung')">samsung</button>
+        <button class="badge-status success" onclick="setSearchQuery('apple')">apple</button>
+        <button class="badge-status success" onclick="setSearchQuery('shoes')">shoes</button>
+        <button class="badge-status success" onclick="setSearchQuery('olive oil')">olive oil</button>
+        <button class="badge-status success" onclick="setSearchQuery('yoga')">yoga</button>
+      </div>
+    </div>
+
+    <!-- Search Results Grid -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:20px;" id="search-results-grid"></div>
+  </main>
+
+  <footer id="nova-footer"></footer>
+
+  <script>
+    let currentSearchResults = [];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('customer');
+      window.novaApp.renderCustomerHeader();
+      window.novaApp.renderFooter();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get('q') || '';
+      const cat = urlParams.get('cat') || 'all';
+
+      if (query) {
+        document.getElementById('header-search-input').value = query;
+      }
+      if (cat && cat !== 'all') {
+        const catSel = document.getElementById('header-search-cat');
+        if (catSel) catSel.value = cat;
+      }
+
+      executeSearch(query, cat);
+    });
+
+    function setSearchQuery(q) {
+      document.getElementById('header-search-input').value = q;
+      executeSearch(q, 'all');
+    }
+
+    function executeSearch(query, category = 'all') {
+      const q = (query || '').toLowerCase().trim();
+      document.getElementById('search-heading').textContent = q ? `Search Results for "${query}"` : 'All Products Catalog';
+
+      currentSearchResults = NOVAMART_DATA.products.filter(p => {
+        const textMatch = !q || p.name.toLowerCase().includes(q) ||
+                          p.brand.toLowerCase().includes(q) ||
+                          p.category.toLowerCase().includes(q) ||
+                          (p.description && p.description.toLowerCase().includes(q)) ||
+                          (p.highlights && p.highlights.some(h => h.toLowerCase().includes(q)));
+
+        if (category && category !== 'all') {
+          return textMatch && p.category === category;
+        }
+        return textMatch;
+      });
+
+      renderSearchResultsGrid(currentSearchResults);
+    }
+
+    function applySearchSort() {
+      const sortVal = document.getElementById('search-sort-select').value;
+      let sorted = [...currentSearchResults];
+      if (sortVal === 'price-low') sorted.sort((a, b) => a.price - b.price);
+      if (sortVal === 'price-high') sorted.sort((a, b) => b.price - a.price);
+      if (sortVal === 'rating') sorted.sort((a, b) => b.rating - a.rating);
+      renderSearchResultsGrid(sorted);
+    }
+
+    function renderSearchResultsGrid(products) {
+      const grid = document.getElementById('search-results-grid');
+      if (products.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:60px; background:white; border-radius:10px; border:1px solid var(--border-store);">
+            <h3>No results found for your search query</h3>
+            <p style="color:var(--text-muted); margin-top:8px;">Try searching with terms like "laptop", "samsung", "shoes", "headphones", "olive oil".</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = products.map(p => {
+        const isWish = window.novaStore.wishlist.includes(p.id);
+        return `
+          <div class="product-card">
+            ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+            <button class="product-wish-btn ${isWish ? 'active' : ''}" onclick="window.novaStore.toggleWishlist('${p.id}')">♥</button>
+            <a href="product-details.html?id=${p.id}">
+              <div class="product-img-wrapper"><img src="${p.image}" alt="${p.name}" /></div>
+              <div class="product-brand">${p.brand}</div>
+              <div class="product-title">${p.name}</div>
+              <div class="product-rating-row">
+                <span class="rating-badge">★ ${p.rating}</span>
+                <span class="rating-count">(${p.reviewsCount.toLocaleString('en-IN')})</span>
+              </div>
+              <div class="product-price-row">
+                <span class="selling-price">₹${p.price.toLocaleString('en-IN')}</span>
+                <span class="original-price">₹${p.mrp.toLocaleString('en-IN')}</span>
+                <span class="discount-tag">${p.discount}% OFF</span>
+              </div>
+              <div class="delivery-info">🚚 ${p.deliveryText}</div>
+            </a>
+            <button class="btn-add-cart" onclick="window.novaStore.addToCart('${p.id}')">🛒 Add to Cart</button>
+          </div>
+        `;
+      }).join('');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Catalog Admin — NOVAMART Operations</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body class="admin-mode">
+  <div id="platform-top-banner"></div>
+
+  <div class="admin-layout">
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border-admin);">
+        <div class="brand-icon-box" style="background:var(--brand-indigo);">N</div>
+        <div>
+          <div style="font-weight:800; color:white; font-size:1.1rem;">NOVAMART</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);">Admin Operations</div>
+        </div>
+      </div>
+      <nav class="admin-nav">
+        <a href="admin.html" class="admin-nav-item">📊 Executive Dashboard</a>
+        <a href="products-admin.html" class="admin-nav-item active">📦 Product Catalog Management</a>
+        <a href="orders-admin.html" class="admin-nav-item">🛒 Orders & Fulfillment</a>
+        <a href="customers-admin.html" class="admin-nav-item">👥 Customer Directory CRM</a>
+        <a href="inventory-admin.html" class="admin-nav-item">🏭 Inventory & SKU Ledger</a>
+        <a href="infrastructure.html" class="admin-nav-item" style="color:var(--brand-cyan); margin-top:20px; border-top:1px solid var(--border-admin); padding-top:16px;">⚡ Switch to Infrastructure ops</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:16px;">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:white;">Product Catalog Management</h1>
+          <p style="color:var(--text-muted); font-size:0.88rem;">Manage live SKUs, inventory counts, pricing, and catalog listings.</p>
+        </div>
+        <button onclick="toggleAddProductModal(true)" class="btn-hero" style="background:var(--brand-indigo); color:white;">
+          + Add New Product SKU
+        </button>
+      </div>
+
+      <!-- Add Product Modal Box -->
+      <div id="add-product-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width:600px; background:#0f172a; color:white; border:1px solid var(--border-admin);">
+          <span class="modal-close-btn" onclick="toggleAddProductModal(false)">&times;</span>
+          <h2 style="font-size:1.3rem; font-weight:800; color:white; margin-bottom:16px;">Add New Product SKU</h2>
+          
+          <form onsubmit="handleAddNewProduct(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div>
+              <label style="font-size:0.8rem; color:#94a3b8;">SKU Code</label>
+              <input type="text" id="np-sku" placeholder="SKU-NEW-101" required style="width:100%; padding:8px; background:#1e293b; color:white; border:1px solid var(--border-admin); border-radius:6px;" />
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:#94a3b8;">Brand Name</label>
+              <input type="text" id="np-brand" placeholder="Samsung / Apple / Nike" required style="width:100%; padding:8px; background:#1e293b; color:white; border:1px solid var(--border-admin); border-radius:6px;" />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label style="font-size:0.8rem; color:#94a3b8;">Product Title</label>
+              <input type="text" id="np-name" placeholder="Product Name" required style="width:100%; padding:8px; background:#1e293b; color:white; border:1px solid var(--border-admin); border-radius:6px;" />
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:#94a3b8;">Category</label>
+              <select id="np-category" style="width:100%; padding:8px; background:#1e293b; color:white; border:1px solid var(--border-admin); border-radius:6px;">
+                <option value="mobiles">Mobiles</option>
+                <option value="laptops">Laptops</option>
+                <option value="electronics">Electronics</option>
+                <option value="fashion">Fashion</option>
+                <option value="grocery">Grocery</option>
+                <option value="sports">Sports</option>
+                <option value="beauty">Beauty</option>
+                <option value="books">Books</option>
+                <option value="toys">Toys</option>
+                <option value="automotive">Automotive</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:#94a3b8;">Selling Price (₹)</label>
+              <input type="number" id="np-price" placeholder="1299" required style="width:100%; padding:8px; background:#1e293b; color:white; border:1px solid var(--border-admin); border-radius:6px;" />
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:#94a3b8;">MRP Original Price (₹)</label>
+              <input type="number" id="np-mrp" placeholder="1999" required style="width:100%; padding:8px; background:#1e293b; color:white; border:1px solid var(--border-admin); border-radius:6px;" />
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:#94a3b8;">Initial Stock Quantity</label>
+              <input type="number" id="np-stock" placeholder="50" required style="width:100%; padding:8px; background:#1e293b; color:white; border:1px solid var(--border-admin); border-radius:6px;" />
+            </div>
+            <div style="grid-column:1/-1; display:flex; gap:10px; margin-top:12px;">
+              <button type="submit" class="btn-hero" style="background:var(--brand-emerald); color:white;">Add Product to Catalog</button>
+              <button type="button" onclick="toggleAddProductModal(false)" style="padding:8px 16px;">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Products Admin Table -->
+      <div style="background:#0f172a; border-radius:var(--radius-lg); border:1px solid var(--border-admin); padding:20px;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>SKU Code</th>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Selling Price</th>
+              <th>Stock</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-products-tbody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('admin');
+      renderAdminProductsTable();
+    });
+
+    function renderAdminProductsTable() {
+      const tbody = document.getElementById('admin-products-tbody');
+      tbody.innerHTML = NOVAMART_DATA.products.map(p => `
+        <tr>
+          <td><img src="${p.image}" alt="${p.name}" style="width:40px; height:40px; object-fit:contain; border-radius:4px;" /></td>
+          <td class="mono" style="font-size:0.85rem;">${p.sku}</td>
+          <td style="font-weight:700;">${p.name}</td>
+          <td><span class="badge-status info" style="text-transform:capitalize;">${p.category}</span></td>
+          <td style="font-weight:800;">₹${p.price.toLocaleString('en-IN')}</td>
+          <td style="font-weight:700; color:${p.stockCount < 20 ? 'var(--brand-rose)' : 'var(--brand-emerald)'};">${p.stockCount} Units</td>
+          <td><span class="badge-status ${p.inStock ? 'success' : 'danger'}">${p.inStock ? 'Active' : 'Hidden'}</span></td>
+          <td>
+            <button onclick="toggleProductVisibility('${p.id}')" style="background:#1e293b; color:var(--brand-cyan); padding:4px 10px; border-radius:4px; font-size:0.8rem; border:1px solid var(--border-admin);">
+              ${p.inStock ? 'Hide SKU' : 'Activate SKU'}
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function toggleProductVisibility(id) {
+      const p = NOVAMART_DATA.products.find(prod => prod.id === id);
+      if (p) {
+        p.inStock = !p.inStock;
+        renderAdminProductsTable();
+        window.novaStore.showToast(`Product SKU ${p.sku} updated visibility status.`, 'info');
+      }
+    }
+
+    function toggleAddProductModal(show) {
+      document.getElementById('add-product-modal').classList.toggle('active', show);
+    }
+
+    function handleAddNewProduct(e) {
+      e.preventDefault();
+      const sku = document.getElementById('np-sku').value.trim();
+      const brand = document.getElementById('np-brand').value.trim();
+      const name = document.getElementById('np-name').value.trim();
+      const category = document.getElementById('np-category').value;
+      const price = Number(document.getElementById('np-price').value);
+      const mrp = Number(document.getElementById('np-mrp').value);
+      const stockCount = Number(document.getElementById('np-stock').value);
+
+      const discount = Math.round(((mrp - price) / mrp) * 100);
+      const newProd = {
+        id: `prod-${Date.now()}`,
+        sku,
+        name,
+        brand,
+        category,
+        price,
+        mrp,
+        discount,
+        rating: 4.5,
+        reviewsCount: 1,
+        inStock: true,
+        stockCount,
+        deliveryText: "FREE Delivery Tomorrow",
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+        images: ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80"],
+        badge: "New Arrival",
+        highlights: ["Official brand product", "Standard warranty included"],
+        specs: { "Brand": brand, "Category": category },
+        description: `Official ${brand} ${name} product item.`
+      };
+
+      NOVAMART_DATA.products.unshift(newProd);
+      toggleAddProductModal(false);
+      renderAdminProductsTable();
+      window.novaStore.showToast(`New SKU ${sku} added to NOVAMART catalog!`, 'success');
+    }
+  </script>
+</body>
+</html>

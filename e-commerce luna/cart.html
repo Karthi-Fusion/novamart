@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div id="platform-top-banner"></div>
+  <header id="nova-header"></header>
+
+  <main class="store-container" style="margin-top:24px;">
+    <h1 style="font-size:1.8rem; font-weight:800; color:var(--brand-navy); margin-bottom:20px;">Shopping Cart</h1>
+
+    <div style="display:grid; grid-template-columns:1fr 340px; gap:24px;" id="cart-layout-container">
+      <!-- Items List -->
+      <div id="cart-items-list">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Price Summary Box -->
+      <div style="background:white; border-radius:var(--radius-lg); padding:24px; border:1px solid var(--border-store); height:fit-content;">
+        <h3 style="font-size:1.1rem; font-weight:800; color:var(--brand-navy); margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border-store);">
+          PRICE DETAILS
+        </h3>
+
+        <div style="display:flex; flex-direction:column; gap:12px; font-size:0.9rem; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between;">
+            <span>Price (<span id="cart-summary-item-count">0</span> items)</span>
+            <span id="cart-summary-mrp">₹0</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; color:var(--brand-emerald); font-weight:600;">
+            <span>Discount Savings</span>
+            <span id="cart-summary-discount">-₹0</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>Delivery Charges</span>
+            <span style="color:var(--brand-emerald); font-weight:700;">FREE</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-muted);">
+            <span>Coupon Discount</span>
+            <span id="cart-summary-coupon" style="color:var(--brand-emerald); font-weight:700;">-₹0</span>
+          </div>
+          <div style="border-top:1px dashed var(--border-store); padding-top:12px; display:flex; justify-content:space-between; font-size:1.15rem; font-weight:800; color:var(--brand-navy);">
+            <span>Total Amount</span>
+            <span id="cart-summary-total">₹0</span>
+          </div>
+        </div>
+
+        <!-- Coupon Input -->
+        <div style="display:flex; gap:8px; margin-bottom:20px;">
+          <input type="text" id="coupon-code-input" placeholder="Coupon Code (e.g. NOVA10)" style="flex:1; padding:8px 12px; border:1px solid var(--border-store); border-radius:6px; text-transform:uppercase; font-size:0.85rem;" />
+          <button onclick="applyCoupon()" style="background:var(--brand-navy); color:white; padding:8px 14px; border-radius:6px; font-size:0.85rem; font-weight:700;">Apply</button>
+        </div>
+
+        <a href="checkout.html" class="btn-hero" style="width:100%; justify-content:center; background:var(--brand-indigo); color:white;">
+          PROCEED TO CHECKOUT →
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer id="nova-footer"></footer>
+
+  <script>
+    let appliedCouponDiscount = 0;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('customer');
+      window.novaApp.renderCustomerHeader();
+      window.novaApp.renderFooter();
+
+      renderCart();
+    });
+
+    function renderCart() {
+      const container = document.getElementById('cart-items-list');
+      const cartItems = window.novaStore.cart;
+
+      if (cartItems.length === 0) {
+        document.getElementById('cart-layout-container').style.gridTemplateColumns = '1fr';
+        container.innerHTML = `
+          <div style="background:white; border-radius:10px; padding:60px; text-align:center; border:1px solid var(--border-store);">
+            <h2>Your Cart is Empty 🛒</h2>
+            <p style="color:var(--text-muted); margin-bottom:20px;">Looks like you haven't added anything to your cart yet.</p>
+            <a href="products.html" class="btn-hero" style="display:inline-flex;">Start Shopping Now</a>
+          </div>
+        `;
+        document.getElementById('cart-summary-total').textContent = '₹0';
+        return;
+      }
+
+      let totalMRP = 0;
+      let totalSelling = 0;
+
+      container.innerHTML = cartItems.map(item => {
+        const p = NOVAMART_DATA.products.find(prod => prod.id === item.id);
+        if (!p) return '';
+
+        totalMRP += p.mrp * item.qty;
+        totalSelling += p.price * item.qty;
+
+        return `
+          <div style="background:white; border-radius:var(--radius-md); padding:20px; border:1px solid var(--border-store); margin-bottom:16px; display:flex; gap:20px; align-items:center;">
+            <img src="${p.image}" alt="${p.name}" style="width:100px; height:100px; object-fit:contain;" />
+            <div style="flex:1;">
+              <div style="font-size:0.78rem; font-weight:700; color:var(--brand-indigo);">${p.brand}</div>
+              <h3 style="font-size:1rem; font-weight:700; color:var(--brand-navy); margin-bottom:6px;">${p.name}</h3>
+              <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:12px;">
+                <span style="font-weight:800; font-size:1.1rem;">₹${(p.price * item.qty).toLocaleString('en-IN')}</span>
+                <span style="font-size:0.85rem; color:var(--text-light); text-decoration:line-through;">₹${(p.mrp * item.qty).toLocaleString('en-IN')}</span>
+                <span style="font-size:0.8rem; color:var(--brand-emerald); font-weight:700;">${p.discount}% OFF</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:20px;">
+                <div style="display:flex; align-items:center; border:1px solid var(--border-store); border-radius:6px;">
+                  <button onclick="updateQty('${p.id}', ${item.qty - 1})" style="padding:4px 12px; font-weight:800;">-</button>
+                  <span style="padding:4px 12px; font-weight:700;">${item.qty}</span>
+                  <button onclick="updateQty('${p.id}', ${item.qty + 1})" style="padding:4px 12px; font-weight:800;">+</button>
+                </div>
+                <button onclick="window.novaStore.removeFromCart('${p.id}'); renderCart();" style="color:var(--brand-rose); font-weight:700; font-size:0.85rem;">Remove</button>
+                <button onclick="window.novaStore.toggleWishlist('${p.id}')" style="color:var(--text-muted); font-weight:600; font-size:0.85rem;">Save for Later</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const totalDiscount = totalMRP - totalSelling;
+      const finalAmount = Math.max(0, totalSelling - appliedCouponDiscount);
+
+      document.getElementById('cart-summary-item-count').textContent = cartItems.reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cart-summary-mrp').textContent = `₹${totalMRP.toLocaleString('en-IN')}`;
+      document.getElementById('cart-summary-discount').textContent = `-₹${totalDiscount.toLocaleString('en-IN')}`;
+      document.getElementById('cart-summary-coupon').textContent = `-₹${appliedCouponDiscount.toLocaleString('en-IN')}`;
+      document.getElementById('cart-summary-total').textContent = `₹${finalAmount.toLocaleString('en-IN')}`;
+    }
+
+    function updateQty(id, qty) {
+      window.novaStore.updateCartQty(id, qty);
+      renderCart();
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById('coupon-code-input').value.trim().toUpperCase();
+      if (code === 'NOVA10' || code === 'FIRST500') {
+        appliedCouponDiscount = 500;
+        window.novaStore.showToast('Coupon NOVA10 applied! Extra ₹500 Discount!', 'success');
+        renderCart();
+      } else {
+        window.novaStore.showToast('Invalid Coupon Code. Try "NOVA10".', 'warning');
+      }
+    }
+  </script>
+</body>
+</html>

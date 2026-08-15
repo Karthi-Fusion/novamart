@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Monitoring — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body class="infra-mode">
+  <div id="platform-top-banner"></div>
+
+  <div class="infra-app-container">
+    <aside class="infra-sidebar">
+      <div>
+        <div style="padding:20px; border-bottom:1px solid var(--border-infra); display:flex; align-items:center; gap:10px;">
+          <div class="brand-icon-box" style="width:34px; height:34px; font-size:1rem; background:linear-gradient(135deg, var(--brand-cyan), var(--brand-indigo));">⚡</div>
+          <div>
+            <div style="font-weight:800; color:white; font-size:1.1rem;">StoreOps</div>
+            <div style="font-size:0.7rem; color:var(--brand-cyan); font-weight:700;">DEVOPS CONTROL v2.8</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav-list">
+          <a href="infrastructure.html" class="sidebar-nav-item">🗺️ Architecture Map</a>
+          <a href="deployments.html" class="sidebar-nav-item">🚀 Deployments</a>
+          <a href="cicd.html" class="sidebar-nav-item">⚡ CI/CD Pipeline</a>
+          <a href="monitoring.html" class="sidebar-nav-item active">📊 Real-Time Telemetry</a>
+          <a href="security.html" class="sidebar-nav-item">🔒 Security Center</a>
+          <a href="incidents.html" class="sidebar-nav-item">⚠️ Incidents (2)</a>
+          <a href="datacenter.html" class="sidebar-nav-item">🖥️ Data Center & DR</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="infra-main-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:white;">Real-Time E-Commerce & Systems Monitoring</h1>
+          <p style="color:#94a3b8; font-size:0.9rem;">Live metrics correlating customer order traffic with backend microservices health.</p>
+        </div>
+        <span class="badge-status success" style="padding:6px 14px;">🟢 Telemetry Stream: ACTIVE (100ms)</span>
+      </div>
+
+      <!-- Connected E-Commerce Metrics Grid -->
+      <div class="kpi-grid" style="margin-bottom:24px;">
+        <div class="kpi-card">
+          <div class="kpi-title">Orders / Minute</div>
+          <div class="kpi-value" style="color:var(--brand-cyan);" id="mon-orders-min">142</div>
+          <div class="kpi-status" style="color:var(--brand-emerald);">↑ Peak Sales Traffic</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Payment API Latency</div>
+          <div class="kpi-value" style="color:var(--brand-amber);" id="mon-pay-lat">85 ms</div>
+          <div class="kpi-status" style="color:var(--brand-amber);">⚠️ Gateway Spike</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Product API Latency</div>
+          <div class="kpi-value" style="color:var(--brand-emerald);" id="mon-prod-lat">22 ms</div>
+          <div class="kpi-status" style="color:var(--brand-emerald);">✓ Redis Cache Hit 99.4%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Cart Service Health</div>
+          <div class="kpi-value" style="color:var(--brand-emerald);">100%</div>
+          <div class="kpi-status">0 Session Evictions</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Checkout Conversion</div>
+          <div class="kpi-value">99.4%</div>
+          <div class="kpi-status" style="color:var(--brand-emerald);">✓ Optimal Flow</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Global Error Rate</div>
+          <div class="kpi-value" style="color:var(--brand-emerald);">0.12%</div>
+          <div class="kpi-status">Below SLA 1.0% Limit</div>
+        </div>
+      </div>
+
+      <!-- Interactive Canvas Metrics -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+        <div class="ops-card">
+          <div class="ops-card-header">
+            <span class="ops-card-title">📊 Live Server CPU & RAM Load</span>
+          </div>
+          <canvas id="live-cpu-canvas" height="200"></canvas>
+        </div>
+
+        <div class="ops-card">
+          <div class="ops-card-header">
+            <span class="ops-card-title">⚡ API Request Latency Distribution (ms)</span>
+          </div>
+          <canvas id="live-latency-canvas" height="200"></canvas>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('infra');
+
+      // Simple Canvas Charting Simulation
+      const cpuCtx = document.getElementById('live-cpu-canvas').getContext('2d');
+      const latCtx = document.getElementById('live-latency-canvas').getContext('2d');
+
+      let cpuData = [35, 40, 42, 38, 45, 50, 42];
+      let latData = [25, 30, 22, 85, 40, 32, 28];
+
+      function drawChart(ctx, data, color) {
+        const w = ctx.canvas.width = ctx.canvas.parentElement.clientWidth - 40;
+        const h = ctx.canvas.height = 180;
+        ctx.clearRect(0, 0, w, h);
+
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+
+        const step = w / (data.length - 1);
+        data.forEach((val, i) => {
+          const x = i * step;
+          const y = h - (val / 100) * h;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+      }
+
+      setInterval(() => {
+        cpuData.shift();
+        cpuData.push(Math.floor(35 + Math.random() * 20));
+        drawChart(cpuCtx, cpuData, '#06b6d4');
+
+        latData.shift();
+        latData.push(Math.floor(20 + Math.random() * 35));
+        drawChart(latCtx, latData, '#10b981');
+
+        document.getElementById('mon-orders-min').textContent = Math.floor(130 + Math.random() * 30);
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

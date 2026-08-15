@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories Showcase — NOVAMART</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div id="platform-top-banner"></div>
+  <header id="nova-header"></header>
+
+  <main class="store-container" style="margin-top:24px;">
+    <div style="margin-bottom:24px;">
+      <h1 style="font-size:1.8rem; font-weight:800; color:var(--brand-navy);">Explore All Product Categories</h1>
+      <p style="color:var(--text-muted);">Browse top-rated brands and items across our smart store departments.</p>
+    </div>
+
+    <div class="category-grid" id="full-categories-grid" style="grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:24px;">
+      <!-- Rendered via JS -->
+    </div>
+  </main>
+
+  <footer id="nova-footer"></footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.novaApp.renderTopBanner('customer');
+      window.novaApp.renderCustomerHeader();
+      window.novaApp.renderFooter();
+
+      const gridEl = document.getElementById('full-categories-grid');
+      gridEl.innerHTML = NOVAMART_DATA.categories.map(c => `
+        <a href="products.html?cat=${c.id}" class="category-card" style="padding:24px;">
+          <div class="category-img-box" style="width:100px; height:100px;"><img src="${c.image}" alt="${c.name}" /></div>
+          <div class="category-name" style="font-size:1.05rem; margin-top:8px;">${c.name}</div>
+          <div class="category-price">Starting from ₹${c.startingPrice.toLocaleString('en-IN')}</div>
+          <div style="font-size:0.75rem; color:var(--brand-indigo); font-weight:700; margin-top:10px;">${c.count}+ Products →</div>
+        </a>
+      `).join('');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Store Infrastructure | DevOps & Cloud Control Center</title>
+  <meta name="description" content="Production Deployment & Management Control Center for scalable enterprise e-commerce platform.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Inter & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Initial Splash Loading Screen -->
+  <div id="splash-screen">
+    <div class="splash-logo">
+      <div class="splash-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+      </div>
+      <div>
+        <div class="splash-title">ONLINE STORE INFRASTRUCTURE</div>
+        <div class="splash-sub">Deploy • Monitor • Secure • Scale</div>
+      </div>
+    </div>
+    <div class="splash-progress-track">
+      <div class="splash-progress-bar" id="splash-bar"></div>
+    </div>
+  </div>
+
+  <div id="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        </div>
+        <div class="sidebar-brand-text">
+          StoreOps Control
+          <span>ENTERPRISE v2.4</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Core Control</div>
+        <a class="nav-item active" data-target="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Overview
+        </a>
+        <a class="nav-item" data-target="infrastructure">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          Infrastructure
+        </a>
+        <a class="nav-item" data-target="deployment">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Deployment
+        </a>
+        <a class="nav-item" data-target="cicd">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+          CI/CD Pipeline
+        </a>
+
+        <div class="nav-section-title">Telemetry & Reliability</div>
+        <a class="nav-item" data-target="monitoring">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Monitoring
+        </a>
+        <a class="nav-item" data-target="performance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          Performance
+        </a>
+        <a class="nav-item" data-target="ha_failover">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          High Availability
+        </a>
+        <a class="nav-item" data-target="incidents">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Incidents
+        </a>
+
+        <div class="nav-section-title">Security & Ops</div>
+        <a class="nav-item" data-target="security">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Security
+        </a>
+        <a class="nav-item" data-target="scalability">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+          Scalability
+        </a>
+        <a class="nav-item" data-target="backup">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Backup & Recovery
+        </a>
+        <a class="nav-item" data-target="documentation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Documentation
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="engineer-card">
+          <div class="avatar">DE</div>
+          <div class="engineer-info">
+            <div class="engineer-name">Deploy Engineer</div>
+            <div class="engineer-role">DevOps & Infra Lead</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-toggle" aria-label="Toggle menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="header-title-container">
+            <span style="font-weight:700; font-size:1.1rem; color:var(--text-bright);">☰ Online Store Infrastructure</span>
+            <div class="system-status-pill">
+              <div class="status-dot"></div>
+              <span>SYSTEM OPERATIONAL</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="header-clock" id="live-clock">Last checked: --:--:-- PM</div>
+          <button class="icon-btn" id="btn-search-trigger" title="Global Search (Ctrl+K)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+          <button class="icon-btn" id="btn-notification-toggle" title="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="badge-count" id="notif-count">3</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Dashboard Content Container -->
+      <main class="content-area">
+
+        <!-- SECTION 1: OVERVIEW -->
+        <section class="dashboard-section active" id="sec-overview">
+          <div class="card" style="background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(6,182,212,0.08)); border-color: var(--border-glow); margin-bottom: 24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+              <div>
+                <span class="badge badge-info" style="margin-bottom:8px;">PRODUCTION CONTROL CENTER</span>
+                <h1 style="font-size:1.8rem; margin-bottom:6px;">Online Store Infrastructure</h1>
+                <p style="color:var(--text-muted); max-width:720px;">
+                  Monitor, deploy, secure and manage the complete e-commerce production infrastructure from a single control center.
+                </p>
+              </div>
+              <div>
+                <span class="badge badge-success" style="padding: 8px 16px; font-size:0.85rem;">
+                  <span class="status-dot"></span> Production Environment: ONLINE
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Continuous Glowing Workflow Line -->
+          <div class="workflow-banner">
+            <div class="workflow-title">
+              <span>AUTOMATED PRODUCTION DEPLOYMENT WORKFLOW</span>
+              <span class="badge badge-info mono">REAL-TIME PIPELINE ACTIVE</span>
+            </div>
+            <div class="workflow-pipeline">
+              <div class="workflow-step active"><div class="workflow-node">DEV</div><div class="workflow-label">Developer</div></div>
+              <div class="workflow-connector"></div>
+              <div class="workflow-step active"><div class="workflow-node">REPO</div><div class="workflow-label">Commit</div></div>
+              <div class="workflow-connector"></div>
+              <div class="workflow-step active"><div class="workflow-node">CI</div><div class="workflow-label">Build</div></div>
+              <div class="workflow-connector"></div>
+              <div class="workflow-step active"><div class="workflow-node">TEST</div><div class="workflow-label">Test</div></div>
+              <div class="workflow-connector"></div>
+              <div class="workflow-step active"><div class="workflow-node">VAL</div><div class="workflow-label">Validate</div></div>
+              <div class="workflow-connector"></div>
+              <div class="workflow-step active"><div class="workflow-node">PROD</div><div class="workflow-label">Deploy</div></div>
+              <div class="workflow-connector"></div>
+              <div class="workflow-step active"><div class="workflow-node">OPS</div><div class="workflow-label">Monitor</div></div>
+              <div class="workflow-connector"></div>
+              <div class="workflow-step active"><div class="workflow-node">USER</div><div class="workflow-label">Customers</div></div>
+            </div>
+          </div>
+
+          <!-- Key Metrics Grid -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-label">Application Status</div>
+              <div class="metric-value" style="color:var(--emerald-success);">ONLINE</div>
+              <div class="metric-trend trend-up">✓ Operational</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Deployment Status</div>
+              <div class="metric-value" style="color:var(--cyan-primary);">SUCCESSFUL</div>
+              <div class="metric-trend trend-up">v2.4.1 Released</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">CI/CD Pipeline</div>
+              <div class="metric-value" style="color:var(--blue-primary);">ACTIVE</div>
+              <div class="metric-trend trend-up">Automated Triggers</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Server Health</div>
+              <div class="metric-value" id="val-server-health">98.7%</div>
+              <div class="metric-trend trend-up">↑ 0.2% vs avg</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Uptime SLA</div>
+              <div class="metric-value">99.98%</div>
+              <div class="metric-trend trend-up">Target 99.95%</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Active Users</div>
+              <div class="metric-value" id="val-active-users">24,892</div>
+              <div class="metric-trend trend-up">↑ Live Sessions</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Requests / Min</div>
+              <div class="metric-value" id="val-req-min">1,842</div>
+              <div class="metric-trend trend-up">↑ Peak Load</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Error Rate</div>
+              <div class="metric-value" id="val-error-rate" style="color:var(--emerald-success);">0.12%</div>
+              <div class="metric-trend trend-up">↓ Below threshold</div>
+            </div>
+          </div>
+
+          <!-- Architecture Visualizer & Activity -->
+          <div class="grid-2-1">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                  Interactive Architecture Topology
+                </div>
+                <span class="badge badge-info">Click node for details</span>
+              </div>
+              <div class="architecture-container">
+                <div class="arch-card" data-arch="dev">
+                  <div class="arch-icon">💻</div>
+                  <div class="arch-title">Developer</div>
+                  <div class="arch-badge">Git Push</div>
+                </div>
+                <div class="arch-card" data-arch="repo">
+                  <div class="arch-icon">📦</div>
+                  <div class="arch-title">Source Repo</div>
+                  <div class="arch-badge">GitHub/GitLab</div>
+                </div>
+                <div class="arch-card" data-arch="cicd">
+                  <div class="arch-icon">⚡</div>
+                  <div class="arch-title">CI/CD Engine</div>
+                  <div class="arch-badge">Runner</div>
+                </div>
+                <div class="arch-card" data-arch="build">
+                  <div class="arch-icon">🛠️</div>
+                  <div class="arch-title">Build</div>
+                  <div class="arch-badge">Artifact</div>
+                </div>
+                <div class="arch-card" data-arch="testing">
+                  <div class="arch-icon">🧪</div>
+                  <div class="arch-title">Testing</div>
+                  <div class="arch-badge">100% Passed</div>
+                </div>
+                <div class="arch-card" data-arch="prod">
+                  <div class="arch-icon">🚀</div>
+                  <div class="arch-title">Production</div>
+                  <div class="arch-badge">K8s Cluster</div>
+                </div>
+                <div class="arch-card" data-arch="monitoring">
+                  <div class="arch-icon">📊</div>
+                  <div class="arch-title">Monitoring</div>
+                  <div class="arch-badge">Prometheus</div>
+                </div>
+                <div class="arch-card" data-arch="customers">
+                  <div class="arch-icon">👥</div>
+                  <div class="arch-title">Customers</div>
+                  <div class="arch-badge">Global CDN</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Recent Activity Log</div>
+                <span class="badge badge-info">Live Stream</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:12px;" id="overview-activity-stream">
+                <!-- Activity Stream Items injected via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 2: INFRASTRUCTURE MANAGEMENT -->
+        <section class="dashboard-section" id="sec-infrastructure">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>Infrastructure Management</h1>
+              <p>Monitor cluster nodes, storage pools, load balancers, and environment resources.</p>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Production Environment</div>
+                <span class="badge badge-success">Healthy</span>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-muted);">Primary AWS / Cloud K8s Cluster</p>
+              <div style="margin-top:16px;">
+                <div class="metric-label"><span>CPU Utilization</span><span class="mono">42%</span></div>
+                <div class="progress-bar-wrap"><div class="progress-fill" style="width:42%;"></div></div>
+                <div class="metric-label" style="margin-top:12px;"><span>Memory Usage</span><span class="mono">61%</span></div>
+                <div class="progress-bar-wrap"><div class="progress-fill warning" style="width:61%;"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Application Server Node Pool</div>
+                <span class="badge badge-success">Running</span>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-muted);">8 Active Pod Replicas</p>
+              <div style="margin-top:16px;">
+                <div class="metric-label"><span>Request Load</span><span class="mono">38%</span></div>
+                <div class="progress-bar-wrap"><div class="progress-fill" style="width:38%;"></div></div>
+                <div class="metric-label" style="margin-top:12px;"><span>Network IO</span><span class="mono">32%</span></div>
+                <div class="progress-bar-wrap"><div class="progress-fill" style="width:32%;"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Storage & Database Pool</div>
+                <span class="badge badge-success">Healthy</span>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-muted);">PostgreSQL + Redis Cache Cluster</p>
+              <div style="margin-top:16px;">
+                <div class="metric-label"><span>Storage Allocated</span><span class="mono">48%</span></div>
+                <div class="progress-bar-wrap"><div class="progress-fill" style="width:48%;"></div></div>
+                <div class="metric-label" style="margin-top:12px;"><span>Cache Hit Ratio</span><span class="mono">99.4%</span></div>
+                <div class="progress-bar-wrap"><div class="progress-fill" style="width:99.4%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Production Server Infrastructure Cluster</div>
+              <span class="badge badge-info">3 Active Nodes</span>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="server-health-table">
+                <thead>
+                  <tr>
+                    <th>Server Node</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>CPU Usage</th>
+                    <th>Memory</th>
+                    <th>Storage</th>
+                    <th>Uptime SLA</th>
+                    <th>Health</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 3: PRODUCTION DEPLOYMENT -->
+        <section class="dashboard-section" id="sec-deployment">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>Production Deployment</h1>
+              <p>Manage zero-downtime deployments, release versions, and automated rollbacks.</p>
+            </div>
+            <div class="section-actions">
+              <button class="btn btn-secondary" id="btn-rollback-trigger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                Rollback Version
+              </button>
+              <button class="btn btn-primary" id="btn-deploy-trigger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Deploy Version
+              </button>
+            </div>
+          </div>
+
+          <div class="grid-1-2">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Current Release</div>
+                <span class="badge badge-success">ACTIVE IN PROD</span>
+              </div>
+              <div style="margin-bottom:20px;">
+                <div style="font-size:2rem; font-weight:800; color:var(--cyan-primary);" class="mono" id="current-version-tag">v2.4.1</div>
+                <div style="font-size:0.85rem; color:var(--text-muted);" id="current-version-time">Deployed: 2 minutes ago</div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:0.85rem;">
+                <div><strong>Commit:</strong> <span class="mono">a7f93b2 (Merge PR #142)</span></div>
+                <div><strong>Author:</strong> Deploy Engineer</div>
+                <div><strong>Strategy:</strong> Blue/Green Zero-Downtime</div>
+                <div><strong>Verification:</strong> 100% Passed (142 tests)</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Deployment Verification Stages</div>
+                <span class="badge badge-info">Automated Pipeline</span>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;" id="deployment-stages-grid">
+                <!-- Stages populated by JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: CI/CD PIPELINE -->
+        <section class="dashboard-section" id="sec-cicd">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>CI/CD Pipeline Automation</h1>
+              <p>Continuous Integration & Delivery stage monitoring and build simulation.</p>
+            </div>
+            <div class="section-actions">
+              <button class="btn btn-primary" id="btn-run-pipeline">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Run Pipeline
+              </button>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:24px;">
+            <div class="card-header">
+              <div class="card-title">Automated Stage Visualizer</div>
+              <span class="badge badge-success" id="pipeline-status-badge">Pipeline Ready</span>
+            </div>
+            <div class="workflow-pipeline" id="cicd-pipeline-nodes">
+              <!-- Animated interactive nodes populated by JS -->
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Deployment Release History</div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Version</th>
+                    <th>Status</th>
+                    <th>Timestamp</th>
+                    <th>Duration</th>
+                    <th>Triggered By</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="deployment-history-tbody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 5: MONITORING -->
+        <section class="dashboard-section" id="sec-monitoring">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>Real-Time Monitoring & Telemetry</h1>
+              <p>Live metrics and performance visualizer powered by frontend Canvas charts.</p>
+            </div>
+            <span class="badge badge-success" style="padding:6px 12px;">
+              <span class="status-dot"></span> LIVE MONITORING
+            </span>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">CPU Utilization (%)</div>
+                <span class="mono" style="color:var(--cyan-primary);" id="chart-val-cpu">42.8%</span>
+              </div>
+              <div class="chart-container"><canvas id="chart-cpu"></canvas></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Memory Utilization (%)</div>
+                <span class="mono" style="color:var(--purple-primary);" id="chart-val-mem">61.2%</span>
+              </div>
+              <div class="chart-container"><canvas id="chart-memory"></canvas></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Network Traffic (MB/s)</div>
+                <span class="mono" style="color:var(--emerald-success);" id="chart-val-net">142 MB/s</span>
+              </div>
+              <div class="chart-container"><canvas id="chart-network"></canvas></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Application Response Time (ms)</div>
+                <span class="mono" style="color:var(--amber-warning);" id="chart-val-resp">184 ms</span>
+              </div>
+              <div class="chart-container"><canvas id="chart-response"></canvas></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 6: SECURITY -->
+        <section class="dashboard-section" id="sec-security">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>Security Control Center</h1>
+              <p>Enterprise access control, threat detection, SSL/TLS, and secrets management.</p>
+            </div>
+          </div>
+
+          <div class="grid-1-2">
+            <div class="card" style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px;">
+              <h3 style="margin-bottom:16px;">Security Health Score</h3>
+              <div style="position:relative; width:160px; height:160px;">
+                <canvas id="chart-security-score"></canvas>
+                <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                  <div style="font-size:2.2rem; font-weight:800; color:var(--cyan-primary);" class="mono">94</div>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">OUT OF 100</div>
+                </div>
+              </div>
+              <span class="badge badge-success" style="margin-top:16px;">SECURE & COMPLIANT</span>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Security Governance Controls</div>
+              </div>
+              <div class="grid-2">
+                <div style="background:rgba(0,0,0,0.2); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+                  <div style="font-weight:600;">Access Control</div>
+                  <div style="color:var(--emerald-success); font-size:0.85rem;">Protected (RBAC + MFA)</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.2); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+                  <div style="font-weight:600;">Authentication</div>
+                  <div style="color:var(--emerald-success); font-size:0.85rem;">OAuth2 / OIDC Enabled</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.2); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+                  <div style="font-weight:600;">Secure Communication</div>
+                  <div style="color:var(--emerald-success); font-size:0.85rem;">TLS 1.3 / mTLS Active</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.2); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+                  <div style="font-weight:600;">Secrets Vault</div>
+                  <div style="color:var(--emerald-success); font-size:0.85rem;">Encrypted & Protected</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.2); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+                  <div style="font-weight:600;">Network Protection</div>
+                  <div style="color:var(--emerald-success); font-size:0.85rem;">WAF + DDoS Mitigation</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.2); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+                  <div style="font-weight:600;">Security Scanning</div>
+                  <div style="color:var(--emerald-success); font-size:0.85rem;">Real-time Vulnerability Scan</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 7: SCALABILITY -->
+        <section class="dashboard-section" id="sec-scalability">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>Elastic Infrastructure Scalability</h1>
+              <p>Dynamic horizontal pod autoscaling (HPA) and resource expansion visualizer.</p>
+            </div>
+            <div class="section-actions">
+              <button class="btn btn-primary" id="btn-scale-trigger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                Scale Infrastructure
+              </button>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:24px;">
+            <div class="card">
+              <div class="metric-label">Current Traffic Load</div>
+              <div class="metric-value">24,892 <span style="font-size:0.85rem; font-weight:normal;">users</span></div>
+            </div>
+            <div class="card">
+              <div class="metric-label">Cluster Capacity Used</div>
+              <div class="metric-value" id="val-cluster-capacity">68%</div>
+            </div>
+            <div class="card">
+              <div class="metric-label">Scaling Readiness</div>
+              <div class="metric-value" style="color:var(--emerald-success);">READY</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:24px;">
+            <div class="card-header">
+              <div class="card-title">Active Server Topology</div>
+              <span class="badge badge-info" id="nodes-count-badge">3 Nodes Provisioned</span>
+            </div>
+            <div style="display:flex; gap:16px; flex-wrap:wrap;" id="nodes-visual-container">
+              <!-- Animated node cards dynamically inserted -->
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header"><div class="card-title">Vertical Scaling (Scale-Up)</div></div>
+              <p style="font-size:0.85rem; color:var(--text-muted);">Enhance CPU cores, RAM, and IOPS allocation for existing instances.</p>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Horizontal Scaling (Scale-Out)</div></div>
+              <p style="font-size:0.85rem; color:var(--text-muted);">Provision additional node replicas dynamically based on incoming traffic spikes.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 8: HIGH AVAILABILITY & FAILOVER -->
+        <section class="dashboard-section" id="sec-ha_failover">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>High Availability & Load Balancing</h1>
+              <p>Multi-AZ redundancy, health checks, and automated node failover visualizer.</p>
+            </div>
+            <button class="btn btn-danger" id="btn-simulate-failover">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+              Simulate Node Failure
+            </button>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:24px;">
+            <div class="card">
+              <div class="metric-label">Availability SLA</div>
+              <div class="metric-value" style="color:var(--emerald-success);">99.98%</div>
+            </div>
+            <div class="card">
+              <div class="metric-label">Uptime Counter</div>
+              <div class="metric-value">30 Days</div>
+            </div>
+            <div class="card">
+              <div class="metric-label">Total Downtime (YTD)</div>
+              <div class="metric-value" style="color:var(--text-muted);">8 Minutes</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Multi-AZ Node Topology & Failover Flow</div>
+              <span class="badge badge-success" id="ha-topology-status">All Nodes Healthy</span>
+            </div>
+            <div style="display:flex; justify-content:space-around; align-items:center; padding:32px; gap:20px; flex-wrap:wrap;" id="ha-nodes-flow">
+              <!-- HA Flow Visualizer Injected via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 9: BACKUP & RECOVERY -->
+        <section class="dashboard-section" id="sec-backup">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>Disaster Recovery & Backup Management</h1>
+              <p>Automated snapshot backups, state replication, and RTO/RPO validation.</p>
+            </div>
+            <div class="section-actions">
+              <button class="btn btn-secondary" id="btn-test-recovery">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Test Recovery
+              </button>
+              <button class="btn btn-primary" id="btn-run-backup">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                Run Backup
+              </button>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header"><div class="card-title">Backup System Status</div></div>
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <div><strong>Last Snapshot:</strong> <span id="val-last-backup">Today, 11:45 AM</span></div>
+                <div><strong>Backup Status:</strong> <span class="badge badge-success">SUCCESSFUL</span></div>
+                <div><strong>Protection Level:</strong> <span class="badge badge-info">ACTIVE (AES-256)</span></div>
+                <div><strong>Recovery Readiness:</strong> <span class="badge badge-success">READY</span></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header"><div class="card-title">Backup Retention Snapshots</div></div>
+              <div style="display:flex; flex-direction:column; gap:10px;" id="backup-history-list">
+                <!-- Backup list -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 10: INCIDENTS -->
+        <section class="dashboard-section" id="sec-incidents">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>Incident Management & Resolution</h1>
+              <p>Post-mortem telemetry, incident response workflow, and severity audit.</p>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:24px;">
+            <div class="card">
+              <div class="metric-label">Active Incidents</div>
+              <div class="metric-value" style="color:var(--amber-warning);">1</div>
+            </div>
+            <div class="card">
+              <div class="metric-label">Resolved Today</div>
+              <div class="metric-value" style="color:var(--emerald-success);">8</div>
+            </div>
+            <div class="card">
+              <div class="metric-label">Average Resolution Time</div>
+              <div class="metric-value">14 min</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Incident Audit Log</div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Incident ID</th>
+                    <th>Issue Summary</th>
+                    <th>Severity</th>
+                    <th>Status</th>
+                    <th>Timestamp</th>
+                    <th>Resolution Time</th>
+                  </tr>
+                </thead>
+                <tbody id="incidents-tbody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 11: PERFORMANCE -->
+        <section class="dashboard-section" id="sec-performance">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>Performance & Analytics</h1>
+              <p>Latency distribution, throughput analytics, and timeframe controls.</p>
+            </div>
+            <div class="section-actions" id="perf-timeframe-tabs">
+              <button class="btn btn-secondary btn-sm active" data-time="1h">1 Hour</button>
+              <button class="btn btn-secondary btn-sm" data-time="6h">6 Hours</button>
+              <button class="btn btn-secondary btn-sm" data-time="24h">24 Hours</button>
+              <button class="btn btn-secondary btn-sm" data-time="7d">7 Days</button>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:24px;">
+            <div class="card">
+              <div class="metric-label">Avg Response Time</div>
+              <div class="metric-value" id="val-perf-avg">184 ms</div>
+            </div>
+            <div class="card">
+              <div class="metric-label">Peak Response Time</div>
+              <div class="metric-value" id="val-perf-peak">420 ms</div>
+            </div>
+            <div class="card">
+              <div class="metric-label">Requests / Minute</div>
+              <div class="metric-value" id="val-perf-req">1,842</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Response Latency Distribution Chart</div>
+            </div>
+            <div class="chart-container" style="height:300px;">
+              <canvas id="chart-performance-analytics"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 12: DOCUMENTATION -->
+        <section class="dashboard-section" id="sec-documentation">
+          <div class="section-header">
+            <div class="section-title-group">
+              <h1>Infrastructure Documentation</h1>
+              <p>Standard operating procedures, deployment guidelines, and troubleshooting manuals.</p>
+            </div>
+          </div>
+
+          <div class="grid-1-2">
+            <div class="card">
+              <div style="margin-bottom:16px;">
+                <input type="text" id="doc-search-input" placeholder="Search documentation..." style="width:100%; padding:10px; border-radius:var(--radius-md); background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); color:var(--text-bright);">
+              </div>
+              <div style="display:flex; flex-direction:column; gap:4px;" id="doc-categories-list">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+            <div class="card" id="doc-reader-body" style="line-height:1.7;">
+              <!-- Article content displayed here -->
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Footer -->
+      <footer style="padding:20px 24px; border-top:1px solid var(--border-subtle); background:var(--bg-header); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:0.8rem; color:var(--text-muted);">
+        <div>
+          <strong style="color:var(--text-bright);">ONLINE STORE INFRASTRUCTURE</strong> — Production Deployment & Management Control Center
+        </div>
+        <div>Status: <span style="color:var(--emerald-success); font-weight:600;">Operational</span> | Environment: <span style="color:var(--cyan-primary); font-weight:600;">Production</span> | © 2026 StoreOps</div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- Global Bottom Real-time Logs Console Drawer -->
+  <div class="log-drawer collapsed" id="log-drawer">
+    <div class="log-drawer-header" id="log-drawer-header">
+      <div class="log-drawer-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        Real-Time System Log Stream
+      </div>
+      <div class="log-drawer-controls">
+        <button class="btn btn-secondary btn-sm" id="log-btn-pause">Pause</button>
+        <button class="btn btn-secondary btn-sm" id="log-btn-clear">Clear</button>
+        <button class="btn btn-primary btn-sm" id="log-btn-download">Download Logs</button>
+      </div>
+    </div>
+    <div class="log-body" id="log-console-body">
+      <!-- Live streaming log lines -->
+    </div>
+  </div>
+
+  <!-- Notifications Dropdown Panel -->
+  <div id="notif-panel" style="position:fixed; top:68px; right:24px; width:340px; background:var(--bg-modal); border:1px solid var(--border-glow); border-radius:var(--radius-lg); box-shadow:var(--shadow-card); z-index:200; display:none; padding:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-subtle); padding-bottom:8px;">
+      <span style="font-weight:700; font-size:0.9rem;">Alert & Notification Center</span>
+      <button class="btn btn-secondary btn-sm" id="btn-clear-notifs">Clear All</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;" id="notif-list-container">
+      <!-- Injected via JS -->
+    </div>
+  </div>
+
+  <!-- Global Modal Container -->
+  <div class="modal-overlay" id="global-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">Modal Title</div>
+        <button class="close-btn" id="modal-close-btn">&times;</button>
+      </div>
+      <div id="modal-body">
+        <!-- Injected Content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Script File -->
+  <script src="script.js"></script>
+</body>
+</html>
